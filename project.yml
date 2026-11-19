@@ -1,0 +1,371 @@
+name: PockAI
+options:
+  bundleIdPrefix: com.pockai
+  deploymentTarget:
+    macOS: "12.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: false
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "12.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""  # build.sh fills in the team of your own signing certificate
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "Apple Development"
+    ENABLE_HARDENED_RUNTIME: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    DEAD_CODE_STRIPPING: YES
+    SWIFT_STRICT_CONCURRENCY: minimal
+    GENERATE_INFOPLIST_FILE: NO
+    ARCHS: "$(ARCHS_STANDARD)"
+    ONLY_ACTIVE_ARCH: YES
+  configs:
+    Release:
+      SWIFT_OPTIMIZATION_LEVEL: "-O"
+      SWIFT_COMPILATION_MODE: wholemodule
+
+# Shared settings for every Touch Bar widget bundle (.pock)
+targetTemplates:
+  Widget:
+    type: bundle
+    platform: macOS
+    settings:
+      base:
+        WRAPPER_EXTENSION: pock
+        LD_RUNPATH_SEARCH_PATHS: "@executable_path/../Frameworks @loader_path/../Frameworks"
+        SKIP_INSTALL: YES
+        INFOPLIST_FILE: Widgets/${target_name}/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.pigigaldi.pock.${target_name}
+        PRODUCT_NAME: ${target_name}
+        COMBINE_HIDPI_IMAGES: YES
+    dependencies:
+      - target: PockKit
+        embed: false
+      - target: TinyConstraints
+        embed: false
+
+targets:
+  TinyConstraints:
+    type: framework
+    platform: macOS
+    sources:
+      - path: Vendor/TinyConstraints/Classes
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.TinyConstraints
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+        SKIP_INSTALL: YES
+
+  PockKit:
+    type: framework
+    platform: macOS
+    sources:
+      - path: PockKit/3rd
+      - path: PockKit/Sources
+    dependencies:
+      - target: TinyConstraints
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.PockKit
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+        SKIP_INSTALL: YES
+        LD_RUNPATH_SEARCH_PATHS: "@executable_path/../Frameworks @loader_path/Frameworks"
+
+  # Now-playing helper loaded by /usr/bin/perl (Apple-signed) so it may read MediaRemote on macOS 15.4+
+  MediaHelper:
+    type: library.dynamic
+    platform: macOS
+    sources:
+      - path: PockAIKit/Helper/nowplaying.m
+    settings:
+      base:
+        PRODUCT_NAME: nowplaying
+        EXECUTABLE_PREFIX: lib
+        CLANG_ENABLE_OBJC_ARC: YES
+        SKIP_INSTALL: YES
+        OTHER_LDFLAGS: "-framework Foundation"
+
+  PockAIKit:
+    type: framework
+    platform: macOS
+    sources:
+      - path: PockAIKit/Sources
+      - path: PockAIKit/Helper/np.pl
+        buildPhase: resources
+    dependencies:
+      - target: PockKit
+        embed: false
+      - target: TinyConstraints
+        embed: false
+      - target: MediaHelper
+        embed: false
+        link: false
+    postCompileScripts:
+      - name: Copy now-playing helper
+        script: |
+          cp -f "${BUILT_PRODUCTS_DIR}/libnowplaying.dylib" "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/libnowplaying.dylib"
+        inputFiles:
+          - $(BUILT_PRODUCTS_DIR)/libnowplaying.dylib
+        outputFiles:
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/libnowplaying.dylib
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.PockAIKit
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+        SKIP_INSTALL: YES
+        LD_RUNPATH_SEARCH_PATHS: "@executable_path/../Frameworks @loader_path/Frameworks"
+
+  # ---------- Classic Pock widgets (upgraded) ----------
+  Esc:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Esc
+        excludes: [Info.plist]
+    settings:
+      base:
+        SWIFT_OBJC_BRIDGING_HEADER: Widgets/Esc/Sources/Bridging-Header.h
+
+  Dock:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Dock
+        excludes: [Info.plist]
+    settings:
+      base:
+        SWIFT_OBJC_BRIDGING_HEADER: Widgets/Dock/Sources/Bridging-Header.h
+
+  Status:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Status
+        excludes: [Info.plist]
+
+  ControlCenter:
+    templates: [Widget]
+    sources:
+      - path: Widgets/ControlCenter
+        excludes: [Info.plist]
+    settings:
+      base:
+        SWIFT_OBJC_BRIDGING_HEADER: Widgets/ControlCenter/Sources/Bridging-Header.h
+
+  NowPlaying:
+    templates: [Widget]
+    sources:
+      - path: Widgets/NowPlaying
+        excludes: [Info.plist, Private]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+
+  Weather:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Weather
+        excludes: [Info.plist]
+
+  # ---------- New PockAI widgets ----------
+  Lyrics:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Lyrics
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.Lyrics
+
+  WritingTools:
+    templates: [Widget]
+    sources:
+      - path: Widgets/WritingTools
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.WritingTools
+
+  Subtitles:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Subtitles
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.Subtitles
+
+  SystemMonitor:
+    templates: [Widget]
+    sources:
+      - path: Widgets/SystemMonitor
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.SystemMonitor
+
+  Clipboard:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Clipboard
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.Clipboard
+
+  Timer:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Timer
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.Timer
+
+  QuickActions:
+    templates: [Widget]
+    sources:
+      - path: Widgets/QuickActions
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.QuickActions
+
+  Calendar:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Calendar
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.Calendar
+
+  Games:
+    templates: [Widget]
+    sources:
+      - path: Widgets/Games
+        excludes: [Info.plist]
+    dependencies:
+      - target: PockAIKit
+        embed: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.widget.Games
+
+  Relaunch:
+    type: tool
+    platform: macOS
+    sources:
+      - path: Relaunch
+    settings:
+      base:
+        PRODUCT_NAME: Relaunch
+        SKIP_INSTALL: YES
+
+  # ---------- The app ----------
+  PockAI:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+        excludes:
+          - "Bundle/Info.plist"
+          - "Bundle/Pock.entitlements"
+          - "**/.DS_Store"
+      - path: BrowserExtension
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - target: TinyConstraints
+      - target: PockKit
+      - target: PockAIKit
+      - target: Relaunch
+        embed: false
+        link: false
+      - target: Esc
+        copy: { destination: plugins }
+      - target: Dock
+        copy: { destination: plugins }
+      - target: Status
+        copy: { destination: plugins }
+      - target: ControlCenter
+        copy: { destination: plugins }
+      - target: NowPlaying
+        copy: { destination: plugins }
+      - target: Weather
+        copy: { destination: plugins }
+      - target: Lyrics
+        copy: { destination: plugins }
+      - target: WritingTools
+        copy: { destination: plugins }
+      - target: Subtitles
+        copy: { destination: plugins }
+      - target: SystemMonitor
+        copy: { destination: plugins }
+      - target: Clipboard
+        copy: { destination: plugins }
+      - target: Timer
+        copy: { destination: plugins }
+      - target: QuickActions
+        copy: { destination: plugins }
+      - target: Calendar
+        copy: { destination: plugins }
+      - target: Games
+        copy: { destination: plugins }
+    postCompileScripts:
+      - name: Copy Relaunch helper
+        script: |
+          cp -f "${BUILT_PRODUCTS_DIR}/Relaunch" "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Relaunch"
+        inputFiles:
+          - $(BUILT_PRODUCTS_DIR)/Relaunch
+        outputFiles:
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Relaunch
+    settings:
+      base:
+        PRODUCT_NAME: PockAI
+        PRODUCT_MODULE_NAME: PockAI
+        PRODUCT_BUNDLE_IDENTIFIER: com.pockai.app
+        INFOPLIST_FILE: App/Bundle/Info.plist
+        CODE_SIGN_ENTITLEMENTS: App/Bundle/PockAI.entitlements
+        SWIFT_OBJC_BRIDGING_HEADER: App/Private/Bridging-Header.h
+        LD_RUNPATH_SEARCH_PATHS: "@executable_path/../Frameworks"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        COMBINE_HIDPI_IMAGES: YES
+
+schemes:
+  PockAI:
+    build:
+      targets:
+        PockAI: all
+    run:
+      config: Debug
+    archive:
+      config: Release

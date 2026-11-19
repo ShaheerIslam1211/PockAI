@@ -1,0 +1,15 @@
+# Build output (recreate with ./build.sh or Linux/build-packages.sh)
+build/
+DerivedData/
+*.dmg
+*.deb
+*.rpm
+*.tar.gz
+
+# Xcode per-user state
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# macOS
+.DS_Store

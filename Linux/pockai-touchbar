@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# pockai-touchbar — PockAI layouts for the Touch Bar on Linux (uses tiny-dfr).
+#
+#   pockai-touchbar status            what's installed and running
+#   pockai-touchbar layouts           list layouts
+#   pockai-touchbar apply [layout]    use a layout (default: pockai)
+#   pockai-touchbar restore           go back to the config you had before PockAI
+#
+# Changing the layout needs root (writes /etc/tiny-dfr/config.toml); the command asks for sudo itself.
+set -euo pipefail
+
+VERSION="1.0.0"
+SHARE="${POCKAI_SHARE:-/usr/share/pockai-touchbar}"
+ETC_DIR="/etc/tiny-dfr"
+CONFIG="$ETC_DIR/config.toml"
+BACKUP="$ETC_DIR/config.toml.before-pockai"
+MARK="# managed-by: pockai-touchbar"
+
+say()  { printf '%s\n' "$*"; }
+warn() { printf 'warning: %s\n' "$*" >&2; }
+die()  { printf 'error: %s\n' "$*" >&2; exit 1; }
+
+as_root() {
+	if [ "$(id -u)" -eq 0 ]; then "$@"; else
+		command -v sudo >/dev/null 2>&1 || die "run this as root (sudo not found)"
+		sudo "$@"
+	fi
+}
+
+have_tiny_dfr() { command -v tiny-dfr >/dev/null 2>&1 || [ -x /usr/bin/tiny-dfr ]; }
+
+is_mac() {
+	local vendor product
+	vendor=$(cat /sys/class/dmi/id/sys_vendor 2>/dev/null || true)
+	product=$(cat /sys/class/dmi/id/product_name 2>/dev/null || true)
+	[[ "$vendor" == Apple* ]] && [[ "$product" == MacBookPro* ]]
+}
+
+touchbar_present() {
+	# T2 Macs: appletbdrm (display) + hid-appletb-* drivers; tiny-dfr's udev rules tag the devices.
+	[ -e /dev/tiny_dfr_display ] && return 0
+	compgen -G '/sys/bus/usb/drivers/appletbdrm/*:*' >/dev/null && return 0
+	lsmod 2>/dev/null | grep -qE '^(appletbdrm|hid_appletb_kbd|apple_ib_tb)' && return 0
+	return 1
+}
+
+restart_daemon() {
+	if command -v systemctl >/dev/null 2>&1 && systemctl list-unit-files tiny-dfr.service >/dev/null 2>&1; then
+		as_root systemctl restart tiny-dfr.service 2>/dev/null \
+			&& say "tiny-dfr restarted — the Touch Bar shows the new layout." \
+			|| say "Layout saved. tiny-dfr isn't running right now; it will use it when the Touch Bar is detected (or after a reboot)."
+	else
+		say "Layout saved. Reboot (or restart tiny-dfr) to see it."
+	fi
+}
+
+cmd_layouts() {
+	say "Layouts in $SHARE/layouts:"
+	for f in "$SHARE"/layouts/*.toml; do
+		[ -e "$f" ] || continue
+		local name desc
+		name=$(basename "$f" .toml)
+		desc=$(sed -n '1s/^# *//p' "$f")
+		printf '  %-14s %s\n' "$name" "$desc"
+	done
+}
+
+cmd_apply() {
+	local name="${1:-pockai}"
+	local src="$SHARE/layouts/$name.toml"
+	[ -f "$src" ] || { cmd_layouts; die "no layout called '$name'"; }
+	have_tiny_dfr || warn "tiny-dfr isn't installed yet — the layout is saved and will be used once it is (see 'pockai-touchbar status')."
+	as_root mkdir -p "$ETC_DIR"
+	# Keep the user's own config once, so 'restore' can bring it back.
+	if [ -f "$CONFIG" ] && ! grep -q "$MARK" "$CONFIG" && [ ! -f "$BACKUP" ]; then
+		as_root cp -p "$CONFIG" "$BACKUP"
+		say "Saved your previous config to $BACKUP"
+	fi
+	local tmp
+	tmp=$(mktemp)
+	{ printf '%s (layout: %s)\n' "$MARK" "$name"; cat "$src"; } > "$tmp"
+	as_root install -m 0644 "$tmp" "$CONFIG"
+	rm -f "$tmp"
+	say "Applied layout '$name' → $CONFIG"
+	restart_daemon
+}
+
+cmd_restore() {
+	if [ -f "$BACKUP" ]; then
+		as_root mv -f "$BACKUP" "$CONFIG"
+		say "Restored your previous config."
+	elif [ -f "$CONFIG" ] && grep -q "$MARK" "$CONFIG"; then
+		as_root rm -f "$CONFIG"
+		say "Removed the PockAI layout (tiny-dfr uses its defaults again)."
+	else
+		say "Nothing to restore — $CONFIG isn't managed by PockAI."
+		return 0
+	fi
+	restart_daemon
+}
+
+cmd_status() {
+	say "pockai-touchbar $VERSION"
+	if is_mac; then say "✓ Mac: $(cat /sys/class/dmi/id/product_name 2>/dev/null)"; else say "✗ This doesn't look like a MacBook Pro (Touch Bar Macs only)."; fi
+	if touchbar_present; then say "✓ Touch Bar drivers loaded"; else say "✗ Touch Bar not detected — T2 Macs need a T2 kernel (https://wiki.t2linux.org)."; fi
+	if have_tiny_dfr; then say "✓ tiny-dfr installed"; else say "✗ tiny-dfr not installed — run the PockAI installer or your package manager."; fi
+	if command -v systemctl >/dev/null 2>&1; then
+		local state
+		state=$(systemctl is-active tiny-dfr.service 2>/dev/null || true)
+		say "  tiny-dfr service: ${state:-unknown}"
+	fi
+	if [ -f "$CONFIG" ] && grep -q "$MARK" "$CONFIG"; then
+		say "✓ Layout: $(sed -n "1s/.*layout: \(.*\))/\1/p" "$CONFIG")"
+	elif [ -f "$CONFIG" ]; then
+		say "  Layout: your own ($CONFIG)"
+	else
+		say "  Layout: tiny-dfr default (run 'pockai-touchbar apply')"
+	fi
+}
+
+case "${1:-status}" in
+	status)            cmd_status ;;
+	layouts|list)      cmd_layouts ;;
+	apply|use)         shift; cmd_apply "${1:-pockai}" ;;
+	restore|reset)     cmd_restore ;;
+	-v|--version)      say "$VERSION" ;;
+	-h|--help|help)    sed -n '2,9s/^# \{0,1\}//p' "$0" ;;
+	*)                 die "unknown command '$1' (try: status, layouts, apply, restore)" ;;
+esac

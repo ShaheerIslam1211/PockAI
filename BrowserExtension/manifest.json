@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "PockAI Subtitles",
+  "version": "1.0.0",
+  "description": "Shows the subtitles of the video you're watching (Netflix, YouTube, Prime Video, Disney+, Max, Hulu…) on your MacBook's Touch Bar through the PockAI app.",
+  "background": { "service_worker": "background.js" },
+  "host_permissions": ["http://127.0.0.1:38917/*"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["captions.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "action": { "default_title": "PockAI Subtitles" }
+}
