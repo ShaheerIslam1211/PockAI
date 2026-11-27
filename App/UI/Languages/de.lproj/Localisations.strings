@@ -8,17 +8,17 @@
 */
 
 // MARK: Base
-"base.website_url" = "https://pock.app";
+"base.website_url" = "";
 "base.widget" = "widget";
 
 // MARK: General
-"general.welcome-to-pock" = "Willkommen in Pock";
+"general.welcome-to-pock" = "Willkommen in TouchPlay";
 "general.pock-widgets-manager" = "Widgets-Manager für die Macbook Touch Bar";
 
 // MARK: MainBarMenu
 // General
 "menu.general" = "Allgemein";
-"menu.about" = "Über Pock";
+"menu.about" = "Über TouchPlay";
 "menu.preferences" = "Einstellungen…";
 // Widgets
 "menu.widgets" = "Widgets";
@@ -26,25 +26,25 @@
 "menu.widgets.install-widget" = "Widget installieren…";
 // Customisation
 "menu.customization" = "Anpassung";
-"menu.customization.pock" = "Pock anpassen…";
+"menu.customization.pock" = "TouchPlay anpassen…";
 "menu.customization.control-strip" = "Control Strip anpassen…";
 // Advanced
 "menu.advanced" = "Erweiterte Einstellungen";
 "menu.advanced.re-install-default-widgets" = "Standard-Widgets neu installieren…";
 "menu.advanced.open-widgets-folder" = "Widgets-Ordner öffnen…";
-"menu.advanced.reload_pock" = "Pock neu laden…";
-"menu.advanced.relaunch_pock" = "Pock neu starten…";
+"menu.advanced.reload_pock" = "TouchPlay neu laden…";
+"menu.advanced.relaunch_pock" = "TouchPlay neu starten…";
 "menu.advanced.reload_touchbar" = "Control Strip neu laden…";
 "menu.advanced.relaunch_touchbar" = "Touch Bar neu starten…";
 "menu.developers" = "Entwickler";
 "menu.advanced.show_debug_console" = "Debug-Konsole anzeigen…";
 // Quit
 "menu.goodbye" = "Auf Wiedersehen!";
-"menu.quit" = "Pock beenden";
+"menu.quit" = "TouchPlay beenden";
 
 // MARK: Onboard Screen
 "onboard.title" = "Holen Sie das Beste aus der Touch Bar Ihres Macbook Pro";
-"onboard.body" = "Pock ist mit Standard-Widgets ausgestattet, die Ihnen Zugriff auf wichtige Informationen, Befehle und Funktionen Ihrer meistgenutzten Dienste geben.";
+"onboard.body" = "TouchPlay ist mit Standard-Widgets ausgestattet, die Ihnen Zugriff auf wichtige Informationen, Befehle und Funktionen Ihrer meistgenutzten Dienste geben.";
 "onboard.footer" = "Folgen Sie den Anweisungen in der Touch Bar, um Standard-Widgets zu installieren";
 "onboard.open-preferences" = "Einstellungen öffnen…";
 "onboard.continue-with-default-settings" = "Mit den Standardeinstellungen fortfahren";
@@ -60,9 +60,9 @@
 "preferences.layout.title" = "Lay-out";
 
 "preferences.double-control.title" = "Zur Standard-Touch Bar wechseln";
-"preferences.double-control.desc" = "Drücken Sie zweimal die Taste \"^Control\", um von Pock zur System-Touch-Bar zu wechseln und umgekehrt.";
+"preferences.double-control.desc" = "Drücken Sie zweimal die Taste \"^Control\", um von TouchPlay zur System-Touch-Bar zu wechseln und umgekehrt.";
 "preferences.default-touchbar.shows" = "Die Standard-TouchBar zeigt:";
-"preferences.default-touchbar.desc" = "Um richtig zu funktionieren, kann Pock die Standard-Touch-Bar-Einstellungen überschalten. Sie können jederzeit Standardeinstellungen unter \"Systemeinstellungen > Tastatur\" konfigurieren, um die Touch Bar an Ihre Bedürfnisse anzupassen.";
+"preferences.default-touchbar.desc" = "Um richtig zu funktionieren, kann TouchPlay die Standard-Touch-Bar-Einstellungen überschalten. Sie können jederzeit Standardeinstellungen unter \"Systemeinstellungen > Tastatur\" konfigurieren, um die Touch Bar an Ihre Bedürfnisse anzupassen.";
 
 "preferences.cursor-options.title" = "Cursor-Einstellungen";
 "preferences.cursor-options.enable-mouse-support" = "Cursor-Unterstützung einstellen";
@@ -71,9 +71,9 @@
 "preferences.updates.check-for-updates-once-a-day" = "Einmal täglich nach Updates suchen";
 
 "preferences.updates.already-on-latest-version.title" = "Installierte Version: %@";
-"preferences.updates.already-on-latest-version.message" = "Pock läuft bereits auf der neuesten Version.";
+"preferences.updates.already-on-latest-version.message" = "TouchPlay läuft bereits auf der neuesten Version.";
 "preferences.updates.new-version-available.title" = "Eine neue Version ist verfügbar";
-"preferences.updates.new-version-available.message" = "Möchten Sie Pock von Version %@ auf Version %@ aktualisieren?";
+"preferences.updates.new-version-available.message" = "Möchten Sie TouchPlay von Version %@ auf Version %@ aktualisieren?";
 
 // MARK: Layout Style
 "layout-style.show-control-strip" = "Control Strip anzeigen";
@@ -93,14 +93,14 @@
 "widgets-manager.list.title" = "Widgets-Manager";
 "widgets-manager.list.select-widget" = "Wählen Sie ein Widget aus der Liste";
 "widgets-manager.list.will-be-updated" = "\"%@\" Widget wird aktualisiert";
-"widgets-manager.list.did-update" = "\"%@\" widget aktualisiert. \n Pock neu laden, um zu aktualisieren.";
+"widgets-manager.list.did-update" = "\"%@\" widget aktualisiert. \n TouchPlay neu laden, um zu aktualisieren.";
 "widgets-manager.loading-preferences" = "Einstellungen laden…";
 "widgets-manager.list.no-preferences" = "Dieses Widget hat keine Einstellungen";
 "widgets-manager.list.reset-preferences" = "Einstellungen auf Standardwerte zurücksetzen";
 
 // MARK: Empty Touch Bar
 "widgets.defaults.tap-to-install" = "Tippen Sie auf, um Standard-Widgets zu installieren…";
-"widgets.empty.add-widgets-to-pock" = "Tippen Sie auf, um Widgets zu Pock hinzuzufügen…";
+"widgets.empty.add-widgets-to-pock" = "Tippen Sie auf, um Widgets zu TouchPlay hinzuzufügen…";
 
 // MARK: Widget Install/Update
 
@@ -108,7 +108,7 @@
 "widget.install.default.body" = "Möchten Sie Standard-Widgets installieren?";
 
 "widget.installing.default.body" = "Verarbeitet: %d/%d";
-"widget.installed.default.success.body" = "Standard-Widgets wurden erfolgreich installiert! \n Klicke auf \"Neu starten\", um Pock neu zu starten und geniesse deine brandneue Touch Bar!";
+"widget.installed.default.success.body" = "Standard-Widgets wurden erfolgreich installiert! \n Klicke auf \"Neu starten\", um TouchPlay neu zu starten und geniesse deine brandneue Touch Bar!";
 
 "widget.install.drag-here.title" = "Neues Widget installieren";
 "widget.install.drag-here.body" = "Ziehen Sie die Widget-Datei in dieses Dialogfeld, oder klicken Sie auf die Taste \"Auswählen...\", um die Datei auszuwählen.";
@@ -142,13 +142,13 @@
 "widget.error.body" = "Während des Task ist ein Fehler aufgetreten.\n\n%@";
 
 "widget.remove.success.title" = "Widget erfolgreich entfernt!";
-"widget.remove.success.body" = "Super, %@ Widget wurde komplett entfernt. \n Klicken Sie auf \"Neustarten\", um Pock neu zu starten.";
+"widget.remove.success.body" = "Super, %@ Widget wurde komplett entfernt. \n Klicken Sie auf \"Neustarten\", um TouchPlay neu zu starten.";
 
 "widget.install.success.title" = "Welch ein Erfolg!";
-"widget.install.success.body" = "Gratulation, %@ Widget kann nun zur Touch Bar hinzugefügt werden.\nLaden Sie Pock neu und klicken Sie dann auf die Option \"Pock anpassen...\", um Ihre Widgets zu personalisieren.";
+"widget.install.success.body" = "Gratulation, %@ Widget kann nun zur Touch Bar hinzugefügt werden.\nLaden Sie TouchPlay neu und klicken Sie dann auf die Option \"TouchPlay anpassen...\", um Ihre Widgets zu personalisieren.";
 
 "widget.update.success.title" = "Fertig!";
-"widget.update.success.body" = "Gratulation, %@ Widget ist jetzt auf die neueste Version aktualisiert.\nKlicken Sie auf \"Neustarten\", um Pock neu zu starten.";
+"widget.update.success.body" = "Gratulation, %@ Widget ist jetzt auf die neueste Version aktualisiert.\nKlicken Sie auf \"Neustarten\", um TouchPlay neu zu starten.";
 
 // MARK: Actions
 "general.action.cancel" = "Abrechen";
@@ -177,7 +177,7 @@
 "error.updater.invalid-endpoint-url" = "Ungültige URL.";
 "error.updater.response-error" = "Ungültige Antwort des Servers: %@";
 "error.updater.parsing-error" = " Ungültige Antwortdaten.";
-"error.updater.invalid-core-version" = "Eine neue Version für dieses Widget ist verfügbar, aber Ihre Version von Pock wird nicht unterstützt. Bitte aktualisieren Sie auf die minimal unterstützte Version (%@), um die Version dieses Widgets zu installieren.";
+"error.updater.invalid-core-version" = "Eine neue Version für dieses Widget ist verfügbar, aber Ihre Version von TouchPlay wird nicht unterstützt. Bitte aktualisieren Sie auf die minimal unterstützte Version (%@), um die Version dieses Widgets zu installieren.";
 
 "error.downloader.invalid-file-url" = "Abgeforderte Datei auf dem entfernten Server nicht gefunden.";
 "error.downloader.response-error" = "Kann keine Datei anfordern. Serverantwort: %@";

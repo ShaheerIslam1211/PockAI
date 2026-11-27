@@ -23,7 +23,7 @@
 	<key>NSPrincipalClass</key>
 	<string>Lyrics.LyricsWidget</string>
 	<key>PKWidgetAuthor</key>
-	<string>PockAI</string>
+	<string>Shaheer Muzaffar</string>
 	<key>PKWidgetPreferenceClass</key>
 	<string>PockAIKit.LyricsPreferencePane</string>
 </dict>

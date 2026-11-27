@@ -56,7 +56,7 @@
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zTN-an-Jir">
                                                             <rect key="frame" x="-2" y="0.0" width="28" height="13"/>
-                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Pock" id="f3q-6M-NL6">
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="TouchPlay" id="f3q-6M-NL6">
                                                                 <font key="font" metaFont="system" size="10"/>
                                                                 <color key="textColor" white="0.54512737789999999" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

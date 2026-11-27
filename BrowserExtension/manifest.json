@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "PockAI Subtitles",
+  "name": "TouchPlay Subtitles",
   "version": "1.0.0",
-  "description": "Shows the subtitles of the video you're watching (Netflix, YouTube, Prime Video, Disney+, Max, Hulu…) on your MacBook's Touch Bar through the PockAI app.",
+  "description": "Shows the subtitles of the video you're watching (Netflix, YouTube, Prime Video, Disney+, Max, Hulu…) on your MacBook's Touch Bar through the TouchPlay app.",
   "background": { "service_worker": "background.js" },
   "host_permissions": ["http://127.0.0.1:38917/*"],
   "content_scripts": [
@@ -13,5 +13,5 @@
       "all_frames": true
     }
   ],
-  "action": { "default_title": "PockAI Subtitles" }
+  "action": { "default_title": "TouchPlay Subtitles" }
 }

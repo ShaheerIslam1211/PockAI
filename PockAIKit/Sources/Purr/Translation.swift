@@ -57,6 +57,8 @@ enum LyricsTranslator {
         case .romanHindi:
             // Already Hindi: just show it in Roman letters, no translation needed.
             if lang == "hi" { return .lines(texts.map { $0.isEmpty ? "" : Lyrics.romanise($0) }) }
+            // Already Roman Hindi/Urdu (anything in Latin letters that isn't English): nothing to add.
+            if script == .roman && lang != "en" { return .lines([]) }
             dst = Locale.Language(identifier: "hi")
         case .off:
             return .lines([])
@@ -103,7 +105,7 @@ struct TranslationDownloadView: View {
 
     var body: some View {
         VStack(spacing: 6) {
-            Text("PockAI Lyrics").font(.headline)
+            Text("TouchPlay Lyrics").font(.headline)
             Text("Download the languages to translate lyrics on this Mac.").font(.callout).multilineTextAlignment(.center)
         }
         .padding(20)

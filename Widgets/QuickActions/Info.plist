@@ -23,7 +23,7 @@
 	<key>NSPrincipalClass</key>
 	<string>QuickActions.QuickActionsWidget</string>
 	<key>PKWidgetAuthor</key>
-	<string>PockAI</string>
+	<string>Shaheer Muzaffar</string>
 	<key>PKWidgetPreferenceClass</key>
 	<string>PockAIKit.QuickActionsPreferencePane</string>
 </dict>

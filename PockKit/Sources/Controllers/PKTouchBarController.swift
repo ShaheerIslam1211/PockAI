@@ -109,11 +109,26 @@ open class PKTouchBarController: NSResponder, NSTouchBarDelegate {
     
     // MARK: Private methods
     
+    /// The app's `TouchBarHelper` class. Its Swift module is the app delegate's module, which can differ from
+    /// the app's display name (TouchPlay's module is still `PockAI`), so look there first, then the old way.
+    private static let touchBarHelperClass: NSObjectProtocol? = {
+        var modules: [String] = []
+        if let delegate = NSApp.delegate {
+            let full = NSStringFromClass(type(of: delegate))
+            if let dot = full.firstIndex(of: ".") { modules.append(String(full[..<dot])) }
+        }
+        let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Pock"
+        modules.append(name.replacingOccurrences(of: " ", with: "_").replacingOccurrences(of: "(", with: "_").replacingOccurrences(of: ")", with: "_"))
+        modules.append(contentsOf: ["PockAI", "Pock"])
+        for module in modules {
+            if let cls = objc_getClass("\(module).TouchBarHelper") as? NSObjectProtocol { return cls }
+        }
+        return nil
+    }()
+
     @discardableResult
     private func executeTouchBarHelperMethod(_ methodName: String, for touchBar: NSTouchBar? = nil) -> AnyObject? {
-		let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Pock"
-		let target = name.replacingOccurrences(of: " ", with: "_").replacingOccurrences(of: "(", with: "_").replacingOccurrences(of: ")", with: "_")
-        guard let clss = objc_getClass("\(target).TouchBarHelper") as? NSObjectProtocol else {
+        guard let clss = Self.touchBarHelperClass else {
             return nil
         }
         let selector = Selector(methodName)

@@ -28,14 +28,14 @@ final class SubtitleServer {
 			listener.newConnectionHandler = { [weak self] connection in self?.handle(connection) }
 			listener.stateUpdateHandler = { [weak self] state in
 				if case .failed(let error) = state {
-					NSLog("[PockAI][Subtitles] server failed: \(error)")
+					NSLog("[TouchPlay][Subtitles] server failed: \(error)")
 					DispatchQueue.main.async { self?.listener?.cancel(); self?.listener = nil }
 				}
 			}
 			listener.start(queue: queue)
 			self.listener = listener
 		} catch {
-			NSLog("[PockAI][Subtitles] can't start server: \(error)")
+			NSLog("[TouchPlay][Subtitles] can't start server: \(error)")
 		}
 	}
 

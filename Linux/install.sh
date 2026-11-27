@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# PockAI for Linux on Touch Bar Macs — one-step installer.
+# TouchPlay for Linux on Touch Bar Macs — one-step installer.
 # Works on Fedora, Ubuntu, Linux Mint, Debian, Pop!_OS, Arch/EndeavourOS/Manjaro.
 #
-#   sudo ./install.sh            install tiny-dfr (if needed) + PockAI layouts, apply the PockAI layout
+#   sudo ./install.sh            install tiny-dfr (if needed) + TouchPlay layouts, apply the TouchPlay layout
 #   sudo ./install.sh minimal    …and use the "minimal" layout instead
 #   sudo ./install.sh --uninstall
 #
@@ -10,9 +10,9 @@
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SHARE=/usr/share/pockai-touchbar
-BIN=/usr/bin/pockai-touchbar
-LAYOUT="${1:-pockai}"
+SHARE=/usr/share/touchplay-touchbar
+BIN=/usr/bin/touchplay-touchbar
+LAYOUT="${1:-touchplay}"
 
 say()  { printf '\033[1m%s\033[0m\n' "$*"; }
 warn() { printf 'warning: %s\n' "$*" >&2; }
@@ -23,14 +23,14 @@ die()  { printf 'error: %s\n' "$*" >&2; exit 1; }
 if [ "${1:-}" = "--uninstall" ]; then
 	[ -x "$BIN" ] && "$BIN" restore || true
 	rm -rf "$SHARE" "$BIN"
-	say "PockAI layouts removed. (tiny-dfr itself was left installed.)"
+	say "TouchPlay layouts removed. (tiny-dfr itself was left installed.)"
 	exit 0
 fi
 
-[ -f "$HERE/pockai-touchbar" ] && [ -d "$HERE/layouts" ] || die "run this from the extracted PockAI Linux folder"
+[ -f "$HERE/touchplay-touchbar" ] && [ -d "$HERE/layouts" ] || die "run this from the extracted TouchPlay Linux folder"
 
 . /etc/os-release 2>/dev/null || true
-say "PockAI for Linux — ${PRETTY_NAME:-unknown distro}"
+say "TouchPlay for Linux — ${PRETTY_NAME:-unknown distro}"
 
 product=$(cat /sys/class/dmi/id/product_name 2>/dev/null || echo unknown)
 case "$product" in
@@ -72,10 +72,10 @@ install_tiny_dfr() {
 tiny_ok=1
 install_tiny_dfr || tiny_ok=0
 
-say "Installing PockAI layouts…"
+say "Installing TouchPlay layouts…"
 install -d "$SHARE/layouts"
 install -m 0644 "$HERE"/layouts/*.toml "$SHARE/layouts/"
-install -m 0755 "$HERE/pockai-touchbar" "$BIN"
+install -m 0755 "$HERE/touchplay-touchbar" "$BIN"
 
 if command -v systemctl >/dev/null 2>&1 && [ "$tiny_ok" = 1 ]; then
 	systemctl enable tiny-dfr.service >/dev/null 2>&1 || true
@@ -85,7 +85,7 @@ fi
 echo
 "$BIN" status || true
 echo
-say "Done. Change layout any time:  pockai-touchbar layouts  /  pockai-touchbar apply minimal"
+say "Done. Change layout any time:  touchplay-touchbar layouts  /  touchplay-touchbar apply minimal"
 if ! compgen -G '/sys/bus/usb/drivers/appletbdrm/*:*' >/dev/null && [ ! -e /dev/tiny_dfr_display ]; then
 	warn "The Touch Bar display driver isn't loaded yet. On T2 Macs install the T2 kernel from https://wiki.t2linux.org, then reboot."
 fi

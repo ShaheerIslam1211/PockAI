@@ -53,7 +53,7 @@ struct AppControlsSection: View {
 				   isOn: setting(AppControlsSettings.buttonKey, true))
 			Toggle("Switch automatically when you change apps (your choice is remembered per app)",
 				   isOn: setting(AppControlsSettings.followKey, true))
-			Text("The PockAI button in the Control Strip brings PockAI back (tap again for the app's controls).")
+			Text("The TouchPlay button in the Control Strip brings TouchPlay back (tap again for the app's controls).")
 				.font(.caption).foregroundStyle(.secondary)
 			DisclosureGroup("Apps that start with their own controls (\(apps.filter(AppControlsSettings.isInstalled).count) installed)") {
 				ForEach(apps.filter(AppControlsSettings.isInstalled), id: \.self) { id in

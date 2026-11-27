@@ -8,3 +8,4 @@
 #import "./ApplePrivate.h"
 #import "../Utilities/STPrivilegedTask/STPrivilegedTask.h"
 #import "../Utilities/LoginServiceKit/LoginServiceKit.h"
+#import "./SafeObjC.h"

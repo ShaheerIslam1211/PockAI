@@ -191,7 +191,7 @@ public final class WritingToolsBar: PKTouchBarController {
 	// MARK: Rendering
 
 	private func render() {
-		NSLog("[PockAI] Writing Tools stage: \(stage)")
+		NSLog("[TouchPlay] Writing Tools stage: \(stage)")
 		container.subviews.forEach { $0.removeFromSuperview() }
 		container.layer?.sublayers?.filter { $0.name == "glow" }.forEach { $0.removeFromSuperlayer() }
 		let view: NSView

@@ -121,6 +121,7 @@ private struct LyricsPaneView: View {
 	private let n = LyricsWidgetSettings.didChange
 	@State private var theme = Theme.current
 	@State private var script = LyricsScript.current
+	@State private var romanHindi = LyricsScript.romaniseHindi
 	@State private var translate = TranslateTarget.current
 	@State private var saver = BatterySaver.current
 	@State private var night = NightMode.current
@@ -129,7 +130,7 @@ private struct LyricsPaneView: View {
 
 	var body: some View {
 		VStack(alignment: .leading, spacing: 10) {
-			Section_("On the Pock bar") {
+			Section_("On the Touch Bar") {
 				Toggle("Show lyrics (off: show the song title instead)", isOn: setting("pockai.lyrics.on", true, notify: n))
 				WidthSlider(title: "Width", binding: setting("pockai.lyrics.width", 280.0, notify: n), range: 160...700)
 				Toggle("Album art", isOn: setting("pockai.lyrics.artwork", true, notify: n))
@@ -154,6 +155,9 @@ private struct LyricsPaneView: View {
 			Section_("Lyrics language") {
 				Picker("Script", selection: $script) { ForEach(LyricsScript.allCases, id: \.self) { Text($0.title).tag($0) } }
 					.onChange(of: script) { PurrPlayer.shared.lyricsScript = $0 }
+				Toggle("Show Hindi-script lyrics in Roman Urdu letters (मुझको इतना → Mujhko itna)", isOn: $romanHindi)
+					.onChange(of: romanHindi) { LyricsScript.romaniseHindi = $0; LyricsStore.shared.reload() }
+				Hint("Lyrics come from LRCLIB and NetEase Cloud Music (free, synced). Works for songs and music videos in any app or browser.")
 				if #available(macOS 15.0, *) {
 					Picker("Translate", selection: $translate) { ForEach(TranslateTarget.allCases, id: \.self) { Text($0.title).tag($0) } }
 						.onChange(of: translate) { PurrPlayer.shared.translateTarget = $0 }
@@ -326,7 +330,7 @@ public final class TimerPreferencePane: PockAIPreferencePane {
 // MARK: - Quick Actions
 
 public final class QuickActionsPreferencePane: PockAIPreferencePane {
-	public static let all = ["Screenshot", "Lock", "Display sleep", "Dark mode", "Focus"]
+	public static let all = ["Screenshot", "Lock", "Display sleep", "Dark mode", "Focus", "Wi-Fi", "Show Desktop", "More"]
 	public override var keys: [String] { ["pockai.quick.enabled"] }
 	public override func makeContent() -> AnyView { AnyView(QuickActionsPaneView()) }
 }
@@ -345,6 +349,64 @@ private struct QuickActionsPaneView: View {
 					}))
 			}
 			Hint("Dark mode asks once for permission to control System Events.")
+		}
+	}
+}
+
+// MARK: - Control Center
+
+/// Control Center widget: every button it can show, each with its own checkbox.
+public final class ControlCenterPreferencePane: PockAIPreferencePane {
+	fileprivate static let classic: [(key: String, name: String, fallback: Bool)] = [
+		("shouldShowBrightnessDownItem", "Brightness down", true), ("shouldShowBrightnessUpItem", "Brightness up", true),
+		("shouldShowBrightnessToggleItem", "Brightness slider", false),
+		("shouldShowVolumeDownItem", "Volume down", true), ("shouldShowVolumeUpItem", "Volume up", true),
+		("shouldShowVolumeToggleItem", "Volume slider", false), ("shouldShowVolumeMuteItem", "Mute", false),
+	]
+	fileprivate static let system: [(key: String, name: String, fallback: Bool)] = [
+		("shouldShowLockItem", "Lock", false), ("shouldShowSleepItem", "Sleep", false),
+		("shouldShowScreensaverItem", "Screen saver", false), ("shouldShowDoNotDisturbItem", "Do Not Disturb", false),
+		("touchplay.cc.more", "⊞ Full Control Center (sliders, switches, everything)", true),
+	]
+	public override var keys: [String] {
+		Self.classic.map(\.key) + Self.system.map(\.key) + ControlCenterButtons.all.map(\.key)
+			+ ["shouldShowBrightnessItem", "shouldShowVolumeItem"]
+	}
+	public override func makeContent() -> AnyView { AnyView(ControlCenterPaneView()) }
+	public override func reset() {
+		super.reset()
+		NSWorkspace.shared.notificationCenter.post(name: ControlCenterButtons.reloadNotification, object: nil)
+	}
+}
+
+private struct ControlCenterPaneView: View {
+	private func box(_ key: String, _ name: String, _ fallback: Bool) -> some View {
+		Toggle(name, isOn: Binding(
+			get: { UserDefaults.standard.object(forKey: key) as? Bool ?? fallback },
+			set: {
+				UserDefaults.standard.set($0, forKey: key)
+				// The old master switches must stay on for the brightness / volume buttons to show.
+				UserDefaults.standard.set(true, forKey: "shouldShowBrightnessItem")
+				UserDefaults.standard.set(true, forKey: "shouldShowVolumeItem")
+				NSWorkspace.shared.notificationCenter.post(name: ControlCenterButtons.reloadNotification, object: nil)
+			}))
+	}
+	private let columns = [GridItem(.flexible(), alignment: .leading), GridItem(.flexible(), alignment: .leading)]
+	var body: some View {
+		VStack(alignment: .leading, spacing: 12) {
+			Section_("Screen, keyboard light and sound") {
+				LazyVGrid(columns: columns, alignment: .leading, spacing: 6) {
+					ForEach(ControlCenterPreferencePane.classic, id: \.key) { box($0.key, $0.name, $0.fallback) }
+					ForEach(ControlCenterButtons.keyboard.filter { $0.available() }, id: \.id) { box($0.key, $0.name, $0.defaultOn) }
+				}
+			}
+			Section_("Quick buttons") {
+				LazyVGrid(columns: columns, alignment: .leading, spacing: 6) {
+					ForEach(ControlCenterButtons.quick.filter { $0.available() }, id: \.id) { box($0.key, $0.name, $0.defaultOn) }
+					ForEach(ControlCenterPreferencePane.system, id: \.key) { box($0.key, $0.name, $0.fallback) }
+				}
+				Hint("Each button takes about 50 pt of the bar. Long-press brightness or volume for a slider. Switches (Wi-Fi, Bluetooth, Dark mode…) change their icon to show whether they're on.")
+			}
 		}
 	}
 }

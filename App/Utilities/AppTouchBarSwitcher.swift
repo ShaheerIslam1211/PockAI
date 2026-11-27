@@ -50,7 +50,7 @@ final class AppTouchBarSwitcher: NSObject {
 	private lazy var trayItem: NSCustomTouchBarItem = {
 		let item = NSCustomTouchBarItem(identifier: NSTouchBarItem.Identifier(Self.trayIdentifier))
 		item.view = TrayIconView(image: NSApp.applicationIconImage) { [weak self] in self?.trayTapped() }
-		item.customizationLabel = "PockAI"
+		item.customizationLabel = "TouchPlay"
 		return item
 	}()
 	/// True while PockAI is hidden because of this switcher (so it only brings back what it hid).
@@ -178,6 +178,32 @@ final class AppTouchBarSwitcher: NSObject {
 		steppedAside = true
 		nav.minimize()
 		assertTrayPresence()
+		keepTrayVisible()
+	}
+
+	/// An app that plays media (Netflix, YouTube apps, Music) takes over the Control Strip spot with its own
+	/// play button, which pushed the PockAI button out. Put it back after the app has set up its bar, and keep
+	/// it there while the app's controls are showing.
+	private var trayTimer: Timer?
+	private func keepTrayVisible() {
+		trayTimer?.invalidate()
+		// Re-adding alone doesn't win the spot back from an app's media controls; removing it first does.
+		// (Back-to-back remove + add blanks the whole bar, so leave a moment between them.)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+			guard let self, self.steppedAside else { return }
+			self.removeTray()
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
+				guard let self, self.steppedAside else { return }
+				self.assertTrayPresence()
+			}
+		}
+		let timer = Timer(timeInterval: 3, repeats: true) { [weak self] timer in
+			guard let self, self.steppedAside else { timer.invalidate(); return }
+			self.assertTrayPresence()
+		}
+		timer.tolerance = 0.5
+		RunLoop.main.add(timer, forMode: .common)
+		trayTimer = timer
 	}
 
 	/// Bring PockAI back (only if this switcher hid it, unless the user asked for it).
@@ -186,6 +212,7 @@ final class AppTouchBarSwitcher: NSObject {
 		guard force || steppedAside, controller.isLocked == false, controller.isVisible == false,
 			  let nav = controller.navigationController else { return }
 		steppedAside = false
+		trayTimer?.invalidate()
 		nav.deminimize()
 	}
 
@@ -224,7 +251,7 @@ private final class TrayIconView: NSView {
 		let click = NSClickGestureRecognizer(target: self, action: #selector(tapped))
 		click.allowedTouchTypes = .direct
 		addGestureRecognizer(click)
-		toolTip = "PockAI"
+		toolTip = "TouchPlay"
 	}
 
 	required init?(coder: NSCoder) { nil }

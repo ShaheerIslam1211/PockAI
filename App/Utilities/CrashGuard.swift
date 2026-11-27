@@ -7,7 +7,7 @@ import AppKit
 enum CrashGuard {
 
 	static var logURL: URL {
-		FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Logs/PockAI/last-crash.log")
+		FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Logs/TouchPlay/last-crash.log")
 	}
 
 	static func install() {

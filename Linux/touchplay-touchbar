@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# pockai-touchbar — PockAI layouts for the Touch Bar on Linux (uses tiny-dfr).
+# touchplay-touchbar — TouchPlay layouts for the Touch Bar on Linux (uses tiny-dfr).
 #
-#   pockai-touchbar status            what's installed and running
-#   pockai-touchbar layouts           list layouts
-#   pockai-touchbar apply [layout]    use a layout (default: pockai)
-#   pockai-touchbar restore           go back to the config you had before PockAI
+#   touchplay-touchbar status            what's installed and running
+#   touchplay-touchbar layouts           list layouts
+#   touchplay-touchbar apply [layout]    use a layout (default: touchplay)
+#   touchplay-touchbar restore           go back to the config you had before TouchPlay
 #
 # Changing the layout needs root (writes /etc/tiny-dfr/config.toml); the command asks for sudo itself.
 set -euo pipefail
 
 VERSION="1.0.0"
-SHARE="${POCKAI_SHARE:-/usr/share/pockai-touchbar}"
+SHARE="${TOUCHPLAY_SHARE:-/usr/share/touchplay-touchbar}"
 ETC_DIR="/etc/tiny-dfr"
 CONFIG="$ETC_DIR/config.toml"
-BACKUP="$ETC_DIR/config.toml.before-pockai"
-MARK="# managed-by: pockai-touchbar"
+BACKUP="$ETC_DIR/config.toml.before-touchplay"
+MARK="# managed-by: touchplay-touchbar"
 
 say()  { printf '%s\n' "$*"; }
 warn() { printf 'warning: %s\n' "$*" >&2; }
@@ -66,10 +66,10 @@ cmd_layouts() {
 }
 
 cmd_apply() {
-	local name="${1:-pockai}"
+	local name="${1:-touchplay}"
 	local src="$SHARE/layouts/$name.toml"
 	[ -f "$src" ] || { cmd_layouts; die "no layout called '$name'"; }
-	have_tiny_dfr || warn "tiny-dfr isn't installed yet — the layout is saved and will be used once it is (see 'pockai-touchbar status')."
+	have_tiny_dfr || warn "tiny-dfr isn't installed yet — the layout is saved and will be used once it is (see 'touchplay-touchbar status')."
 	as_root mkdir -p "$ETC_DIR"
 	# Keep the user's own config once, so 'restore' can bring it back.
 	if [ -f "$CONFIG" ] && ! grep -q "$MARK" "$CONFIG" && [ ! -f "$BACKUP" ]; then
@@ -91,19 +91,19 @@ cmd_restore() {
 		say "Restored your previous config."
 	elif [ -f "$CONFIG" ] && grep -q "$MARK" "$CONFIG"; then
 		as_root rm -f "$CONFIG"
-		say "Removed the PockAI layout (tiny-dfr uses its defaults again)."
+		say "Removed the TouchPlay layout (tiny-dfr uses its defaults again)."
 	else
-		say "Nothing to restore — $CONFIG isn't managed by PockAI."
+		say "Nothing to restore — $CONFIG isn't managed by TouchPlay."
 		return 0
 	fi
 	restart_daemon
 }
 
 cmd_status() {
-	say "pockai-touchbar $VERSION"
+	say "touchplay-touchbar $VERSION"
 	if is_mac; then say "✓ Mac: $(cat /sys/class/dmi/id/product_name 2>/dev/null)"; else say "✗ This doesn't look like a MacBook Pro (Touch Bar Macs only)."; fi
 	if touchbar_present; then say "✓ Touch Bar drivers loaded"; else say "✗ Touch Bar not detected — T2 Macs need a T2 kernel (https://wiki.t2linux.org)."; fi
-	if have_tiny_dfr; then say "✓ tiny-dfr installed"; else say "✗ tiny-dfr not installed — run the PockAI installer or your package manager."; fi
+	if have_tiny_dfr; then say "✓ tiny-dfr installed"; else say "✗ tiny-dfr not installed — run the TouchPlay installer or your package manager."; fi
 	if command -v systemctl >/dev/null 2>&1; then
 		local state
 		state=$(systemctl is-active tiny-dfr.service 2>/dev/null || true)
@@ -114,14 +114,14 @@ cmd_status() {
 	elif [ -f "$CONFIG" ]; then
 		say "  Layout: your own ($CONFIG)"
 	else
-		say "  Layout: tiny-dfr default (run 'pockai-touchbar apply')"
+		say "  Layout: tiny-dfr default (run 'touchplay-touchbar apply')"
 	fi
 }
 
 case "${1:-status}" in
 	status)            cmd_status ;;
 	layouts|list)      cmd_layouts ;;
-	apply|use)         shift; cmd_apply "${1:-pockai}" ;;
+	apply|use)         shift; cmd_apply "${1:-touchplay}" ;;
 	restore|reset)     cmd_restore ;;
 	-v|--version)      say "$VERSION" ;;
 	-h|--help|help)    sed -n '2,9s/^# \{0,1\}//p' "$0" ;;

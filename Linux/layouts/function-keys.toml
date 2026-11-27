@@ -1,4 +1,4 @@
-# PockAI function-keys layout for tiny-dfr: F1–F12 by default (developers, games); Fn for media.
+# TouchPlay function-keys layout for tiny-dfr: F1–F12 by default (developers, games); Fn for media.
 
 MediaLayerDefault = false
 ShowButtonOutlines = true

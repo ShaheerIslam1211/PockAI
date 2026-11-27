@@ -1,9 +1,9 @@
 #!/bin/zsh
-# Builds PockAI, installs it to ~/Applications/PockAI.app and (re)launches it.
+# Builds TouchPlay, installs it to ~/Applications/TouchPlay.app and (re)launches it.
 #   ./build.sh            debug build + launch
 #   ./build.sh release    optimised build + launch
 #   ./build.sh --no-open  build + install only
-#   ./build.sh dist       release build → build/PockAI.dmg (drag-to-Applications installer for any Touch Bar Mac)
+#   ./build.sh dist       release build → build/TouchPlay.dmg (drag-to-Applications installer for any Touch Bar Mac)
 set -e
 cd "${0:A:h}"
 CONFIG=Debug
@@ -32,23 +32,24 @@ if ! xcodebuild -project PockAI.xcodeproj -scheme PockAI -configuration $CONFIG 
   echo "BUILD FAILED (full log: build/log.txt)"; exit 1
 fi
 echo "BUILD SUCCEEDED ($CONFIG)"
-APP_SRC="build/DD/Build/Products/$CONFIG/PockAI.app"
+APP_SRC="build/DD/Build/Products/$CONFIG/TouchPlay.app"
 [[ -d "$APP_SRC" ]] || { echo "build failed"; exit 1; }
 if [[ $DIST == 1 ]]; then
   STAGE=build/dmg
-  rm -rf "$STAGE" build/PockAI.dmg
+  rm -rf "$STAGE" build/TouchPlay.dmg
   mkdir -p "$STAGE"
-  ditto "$APP_SRC" "$STAGE/PockAI.app"
+  ditto "$APP_SRC" "$STAGE/TouchPlay.app"
   ln -s /Applications "$STAGE/Applications"
   cp README.md "$STAGE/Read Me.md"
-  hdiutil create -volname "PockAI" -srcfolder "$STAGE" -ov -format UDZO build/PockAI.dmg >/dev/null
+  hdiutil create -volname "TouchPlay" -srcfolder "$STAGE" -ov -format UDZO build/TouchPlay.dmg >/dev/null
   rm -rf "$STAGE"
-  echo "created build/PockAI.dmg ($(du -h build/PockAI.dmg | cut -f1))"
+  echo "created build/TouchPlay.dmg ($(du -h build/TouchPlay.dmg | cut -f1))"
   exit 0
 fi
-APP="$HOME/Applications/PockAI.app"
+APP="$HOME/Applications/TouchPlay.app"
 # Stop the watchdog first, or launchd would restart the old copy while we replace it.
-/bin/launchctl bootout gui/$(id -u)/com.pockai.app.agent 2>/dev/null || true
+for agent in com.touchplay.app.agent com.pockai.app.agent; do /bin/launchctl bootout gui/$(id -u)/$agent 2>/dev/null || true; done
+pkill -x TouchPlay 2>/dev/null || true
 pkill -x PockAI 2>/dev/null || true
 sleep 0.5
 mkdir -p "$HOME/Applications"

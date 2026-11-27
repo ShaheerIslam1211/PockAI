@@ -102,7 +102,7 @@ public enum AIError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .missingKey: "No Gemini API key yet. PockAI menu → AI Settings… and paste your free key."
+        case .missingKey: "No Gemini API key yet. TouchPlay menu → AI Settings… and paste your free key."
         case .noText: "There's no text to work with."
         case .badResponse(let message): message
         case .network(let message): message

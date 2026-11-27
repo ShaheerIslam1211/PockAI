@@ -2,7 +2,7 @@ import AppKit
 import PockKit
 import PockAIKit
 
-/// One-tap system actions: screenshot, lock, display sleep, dark mode, Do Not Disturb (Focus).
+/// One-tap system actions: screenshot, lock, display sleep, dark mode, Focus, Wi-Fi, Show Desktop, and ⊞ for the full Control Center.
 final class QuickActionsWidget: NSObject, PKWidget {
 	static var identifier: String = "com.pockai.widget.QuickActions"
 	var customizationLabel: String = "Quick Actions"
@@ -18,14 +18,12 @@ final class QuickActionsWidget: NSObject, PKWidget {
 		Action(symbol: "camera.viewfinder", name: "Screenshot") { Self.run("/usr/bin/open", ["-a", "Screenshot"]) },
 		Action(symbol: "lock.fill", name: "Lock") { Self.lockScreen() },
 		Action(symbol: "moon.zzz.fill", name: "Display sleep") { Self.run("/usr/bin/pmset", ["displaysleepnow"]) },
-		Action(symbol: "circle.lefthalf.filled", name: "Dark mode") {
-			Self.appleScript("tell application \"System Events\" to tell appearance preferences to set dark mode to not dark mode")
-		},
-		Action(symbol: "moon.fill", name: "Focus") {
-			// Opens Control Centre's Focus module via the Shortcuts-free route: toggles DND with the built-in shortcut if set,
-			// otherwise opens Focus settings.
-			Self.run("/usr/bin/open", ["x-apple.systempreferences:com.apple.Focus-Settings.extension"])
-		},
+		Action(symbol: "circle.lefthalf.filled", name: "Dark mode") { SystemControls.setDarkMode(!SystemControls.darkMode) },
+		Action(symbol: "moon.fill", name: "Focus") { SystemControls.focusSettings() },
+		Action(symbol: "wifi", name: "Wi-Fi") { SystemControls.setWifi(!SystemControls.wifiOn) },
+		Action(symbol: "menubar.dock.rectangle", name: "Show Desktop") { SystemControls.showDesktop() },
+		// Everything else (Bluetooth, Night Shift, keep awake, mic, sliders, eject, sleep…) in one full bar.
+		Action(symbol: "square.grid.2x2.fill", name: "More") { ControlPanel.open() },
 	]
 
 	private let stack = NSStackView()
