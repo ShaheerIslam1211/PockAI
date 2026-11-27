@@ -65,7 +65,7 @@ final class Helper {
         guard proc == nil, let res = Self.resourcePath,
               FileManager.default.fileExists(atPath: res + "/np.pl"),
               FileManager.default.fileExists(atPath: res + "/libnowplaying.dylib") else {
-            NSLog("[PockAI][NowPlaying] helper resources missing")
+            NSLog("[TouchPlay][NowPlaying] helper resources missing")
             return
         }
         lastStart = Date()
@@ -99,7 +99,7 @@ final class Helper {
                 }
             }
         }
-        do { try p.run(); proc = p } catch { NSLog("[PockAI][NowPlaying] helper failed: \(error)") }
+        do { try p.run(); proc = p } catch { NSLog("[TouchPlay][NowPlaying] helper failed: \(error)") }
     }
 
     func stop() {

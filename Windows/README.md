@@ -1,6 +1,6 @@
-# PockAI and Windows (Boot Camp on a Touch Bar Mac)
+# TouchPlay and Windows (Boot Camp on a Touch Bar Mac)
 
-**There is no PockAI for Windows, and no `.exe` to download.** Windows can't do what PockAI
+**There is no TouchPlay for Windows, and no `.exe` to download.** Windows can't do what TouchPlay
 needs:
 
 - **No Windows API for custom Touch Bar content.** Under Boot Camp, Apple's driver runs the
@@ -27,8 +27,8 @@ Apple's Boot Camp officially supports **Windows 10**. Intel Touch Bar Macs don't
 11's TPM 2.0 requirement, so Windows 11 on Boot Camp is unofficial. If you install it anyway,
 the Boot Camp drivers give you the same Touch Bar keys as above.
 
-## Want the full PockAI experience?
+## Want the full TouchPlay experience?
 
 Restart into **macOS**: hold ⌥ Option at startup, or use the Boot Camp tray icon → "Restart in
-macOS". PockAI works on macOS 12 Monterey and newer. **Linux** on a Touch Bar Mac gets
+macOS". TouchPlay works on macOS 12 Monterey and newer. **Linux** on a Touch Bar Mac gets
 media, clock and battery layouts; see [`../Linux/README.md`](../Linux/README.md).

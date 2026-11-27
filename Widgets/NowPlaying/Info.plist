@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Now Playing</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -23,10 +25,8 @@
 	<key>NSPrincipalClass</key>
 	<string>NowPlaying.NowPlayingWidget</string>
 	<key>PKWidgetAuthor</key>
-	<string>Pierluigi Galdi</string>
+	<string>Shaheer Muzaffar</string>
 	<key>PKWidgetPreferenceClass</key>
 	<string>NowPlaying.NowPlayingPreferencePane</string>
-	<key>CFBundleDisplayName</key>
-	<string>Now Playing</string>
 </dict>
 </plist>

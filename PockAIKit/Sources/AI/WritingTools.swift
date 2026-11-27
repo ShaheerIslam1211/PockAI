@@ -39,7 +39,7 @@ public final class WritingToolsController: ObservableObject {
         } else {
             source = ""
             cameFromSelection = false
-            error = "Allow PockAI in System Settings → Privacy & Security → Accessibility so it can read and replace selected text."
+            error = "Allow TouchPlay in System Settings → Privacy & Security → Accessibility so it can read and replace selected text."
             SelectionBridge.requestTrust()
         }
         present()

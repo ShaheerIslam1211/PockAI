@@ -56,7 +56,7 @@ class DebugConsoleViewController: NSViewController {
     
     override var title: String? {
         get {
-            return "Pock • Debug Console"
+            return "TouchPlay • Debug Console"
         }
         set {
             view.window?.title = newValue ?? ""

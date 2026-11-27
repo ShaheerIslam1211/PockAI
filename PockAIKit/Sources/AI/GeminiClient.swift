@@ -179,7 +179,7 @@ public struct GeminiClient: Sendable {
             switch status {
             case 429: throw AIError.badResponse("429 Free limit reached for now. Try again in a minute.")
             case 400 where message.localizedCaseInsensitiveContains("api key"),
-                 401, 403: throw AIError.badResponse("Your Gemini API key isn't valid. Paste a new one in PockAI → AI Settings.")
+                 401, 403: throw AIError.badResponse("Your Gemini API key isn't valid. Paste a new one in TouchPlay → AI Settings.")
             default: throw AIError.badResponse("\(status) \(message)")
             }
         }

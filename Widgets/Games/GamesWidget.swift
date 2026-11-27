@@ -14,9 +14,9 @@ final class GamesWidget: NSObject, PKWidget {
 		b.bezelColor = NSColor(red: 0.2, green: 0.45, blue: 0.3, alpha: 1)
 		view = b
 		// Automation / testing: open the picker, or a game by number ("0"…"3").
-		NSLog("[PockAI] Games hook registered")
+		NSLog("[TouchPlay] Games hook registered")
 		observer = DistributedNotificationCenter.default().addObserver(forName: .init("local.pockai.games.open"), object: nil, queue: .main) { note in
-			NSLog("[PockAI] Games hook fired: \(String(describing: note.object))")
+			NSLog("[TouchPlay] Games hook fired: \(String(describing: note.object))")
 			GamesBar.open(game: (note.object as? String).flatMap(Int.init))
 		}
 	}

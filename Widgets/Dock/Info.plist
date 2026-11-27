@@ -23,7 +23,7 @@
 	<key>NSPrincipalClass</key>
 	<string>Dock.DockWidget</string>
 	<key>PKWidgetAuthor</key>
-	<string>Pierluigi Galdi</string>
+	<string>Shaheer Muzaffar</string>
 	<key>PKWidgetPreferenceClass</key>
 	<string>Dock.DockWidgetPreferencePane</string>
 </dict>

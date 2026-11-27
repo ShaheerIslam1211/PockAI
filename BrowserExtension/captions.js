@@ -1,4 +1,4 @@
-// PockAI Subtitles — reads the captions the video player shows on screen and sends them to the Touch Bar.
+// TouchPlay Subtitles — reads the captions the video player shows on screen and sends them to the Touch Bar.
 (() => {
   if (window.__pockaiCaptions) return;
   window.__pockaiCaptions = true;

@@ -1,5 +1,5 @@
-# PockAI layout for tiny-dfr (Linux on Touch Bar Macs)
-# Installed by `pockai-touchbar apply pockai` to /etc/tiny-dfr/config.toml.
+# TouchPlay layout for tiny-dfr (Linux on Touch Bar Macs)
+# Installed by `touchplay-touchbar apply touchplay` to /etc/tiny-dfr/config.toml.
 # Media + clock + battery by default; hold Fn for F1–F12. Esc is added automatically.
 
 MediaLayerDefault = true

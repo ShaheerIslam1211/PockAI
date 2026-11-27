@@ -1,4 +1,4 @@
-# PockAI minimal layout for tiny-dfr: clean media row without outlines; Fn for F1–F12.
+# TouchPlay minimal layout for tiny-dfr: clean media row without outlines; Fn for F1–F12.
 
 MediaLayerDefault = true
 ShowButtonOutlines = false

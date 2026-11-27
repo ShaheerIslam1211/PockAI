@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSHumanReadableCopyright</key>
@@ -23,8 +23,8 @@
 	<key>NSPrincipalClass</key>
 	<string>ControlCenter.ControlCenterWidget</string>
 	<key>PKWidgetAuthor</key>
-	<string>Pierluigi Galdi</string>
+	<string>Shaheer Muzaffar</string>
 	<key>PKWidgetPreferenceClass</key>
-	<string>ControlCenter.ControlCenterWidgetPreferencePane</string>
+	<string>PockAIKit.ControlCenterPreferencePane</string>
 </dict>
 </plist>

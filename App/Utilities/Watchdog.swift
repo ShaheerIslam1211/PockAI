@@ -6,13 +6,13 @@ import AppKit
 /// Only active for the installed app (~/Applications or /Applications), never for builds run from Xcode.
 enum Watchdog {
 
-	static let label = "com.pockai.app.agent"
+	static let label = "com.touchplay.app.agent"
 
 	static var plistURL: URL {
 		FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/LaunchAgents/\(label).plist")
 	}
 
-	/// Settings → "Restart automatically if PockAI crashes" (and start at login).
+	/// Settings → "Restart automatically if TouchPlay crashes" (and start at login).
 	static var isEnabled: Bool {
 		get { UserDefaults.standard.object(forKey: "pockai.watchdog") as? Bool ?? true }
 		set {
@@ -38,7 +38,7 @@ enum Watchdog {
 		let others = NSRunningApplication.runningApplications(withBundleIdentifier: Bundle.main.bundleIdentifier ?? "")
 			.filter { $0.processIdentifier != me && !$0.isTerminated }
 		if !others.isEmpty {
-			NSLog("[PockAI] Already running (pid \(others.map(\.processIdentifier))), quitting this copy.")
+			NSLog("[TouchPlay] Already running (pid \(others.map(\.processIdentifier))), quitting this copy.")
 			return true
 		}
 		guard isInstalledCopy, isEnabled else {
@@ -81,10 +81,10 @@ enum Watchdog {
 		task.arguments = ["-c", script]
 		do {
 			try task.run()
-			NSLog("[PockAI] Handing over to the launchd watchdog.")
+			NSLog("[TouchPlay] Handing over to the launchd watchdog.")
 			return true
 		} catch {
-			NSLog("[PockAI] Watchdog unavailable: \(error)")
+			NSLog("[TouchPlay] Watchdog unavailable: \(error)")
 			return false
 		}
 	}

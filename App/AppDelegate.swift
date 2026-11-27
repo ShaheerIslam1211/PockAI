@@ -14,12 +14,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	/// MenuBar item and menu
 	private let mainBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-	private let mainBarMenu = NSMenu(title: "Pock")
+	private let mainBarMenu = NSMenu(title: "TouchPlay")
 	
 	private var preferencesMenuItem: NSMenuBadgeItem!
 	private var manageWidgetsMenuItem: NSMenuBadgeItem!
 
 	func applicationWillFinishLaunching(_ notification: Notification) {
+		/// The app used to be called PockAI: bring its settings over and retire the old copy.
+		RenameMigration.run()
 		/// Single instance + launchd watchdog (auto-restart after a crash, start at login).
 		if Watchdog.startup() {
 			exit(0)
@@ -39,6 +41,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 		/// Register the PockAI Control Strip button before the first bar is presented (it's that bar's tray item).
 		AppTouchBarSwitcher.shared.start()
+		TypingSuggestions.shared.start()
+		ControlPanel.registerHook()
 
 		/// Add main bar menu item
 		addMainBarItem()
@@ -70,12 +74,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		DistributedNotificationCenter.default().addObserver(forName: .init("local.pockai.selftest.panes"), object: nil, queue: .main) { _ in
 			for widget in WidgetsLoader.installedWidgets {
 				guard let clss = widget.preferencesClass as? PKWidgetPreference.Type else {
-					NSLog("[PockAI][pane] \(widget.name): no settings")
+					NSLog("[TouchPlay][pane] \(widget.name): no settings")
 					continue
 				}
 				let pane = clss.init(nibName: clss.nibName, bundle: Bundle(for: clss))
 				let size = pane.view.fittingSize
-				NSLog("[PockAI][pane] \(widget.name): OK \(Int(size.width))x\(Int(size.height))")
+				NSLog("[TouchPlay][pane] \(widget.name): OK \(Int(size.width))x\(Int(size.height))")
 			}
 			AppController.shared.openController(WidgetsManagerViewController())
 		}
@@ -124,8 +128,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	// MARK: Setup main bar menu items
 	private func addMainBarItem() {
 		if let button = mainBarItem.button {
-			button.image = NSImage(named: .pockInnerIcon)
-			button.image?.isTemplate = true
+			button.image = NSImage.touchPlayMenuBarIcon
 			/// Create menu
 			setupMainBarMenuItems()
 			mainBarItem.menu = mainBarMenu
@@ -197,7 +200,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		debugMenu.addItem(NSMenuHeader.new(title: "General"))
 		debugMenu.addItem(withTitle: "Open On-Board…", action: #selector(openOnBoardController), keyEquivalent: "")
 		debugMenu.addItem(withTitle: "Toggle Touch Bar visibility", action: #selector(toggleTouchBarVisibility), keyEquivalent: "")
-		debugMenu.addItem(withTitle: "Relaunch Pock", action: #selector(relaunch), keyEquivalent: "")
+		debugMenu.addItem(withTitle: "Relaunch TouchPlay", action: #selector(relaunch), keyEquivalent: "")
 		let debugMenuItem = NSMenuItem(title: "Debug…", action: nil, keyEquivalent: "")
 		debugMenuItem.submenu = debugMenu
 		debugMenuItem.view = NSMenuItemCustomView(item: debugMenuItem)
@@ -258,7 +261,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		))
 		
 		// MARK: PockAI
-		mainBarMenu.addItem(NSMenuHeader.new(title: "PockAI"))
+		mainBarMenu.addItem(NSMenuHeader.new(title: "TouchPlay"))
 		mainBarMenu.addItem(NSMenuItemCustomView.new(
 			title: "Writing Tools for Selected Text  ⌃⌥W",
 			target: self,
@@ -266,7 +269,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			keyEquivalent: nil
 		))
 		mainBarMenu.addItem(NSMenuItemCustomView.new(
-			title: "PockAI ↔ App's own Touch Bar  ⌃⌃",
+			title: "TouchPlay ↔ App's own Touch Bar  ⌃⌃",
 			target: self,
 			selector: #selector(toggleAppTouchBar),
 			keyEquivalent: nil
@@ -285,7 +288,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		subsItem.view = NSMenuItemCustomView(item: subsItem)
 		mainBarMenu.addItem(subsItem)
 		mainBarMenu.addItem(NSMenuItemCustomView.new(
-			title: "PockAI Settings…",
+			title: "TouchPlay Settings…",
 			target: self,
 			selector: #selector(openPockAISettings),
 			keyEquivalent: nil
@@ -367,7 +370,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	// MARK: Open website
 	@objc private func openWebsite() {
-		AppController.shared.openWebsite()
+		let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "2.0.0"
+		let credits = NSMutableAttributedString(
+			string: "Made by Shaheer Muzaffar\n",
+			attributes: [.font: NSFont.boldSystemFont(ofSize: 12), .foregroundColor: NSColor.labelColor]
+		)
+		credits.append(NSAttributedString(
+			string: "Widgets, lyrics, games and Control Center for your Touch Bar.\nIncludes open-source code from Pock (MIT licence).",
+			attributes: [.font: NSFont.systemFont(ofSize: 10), .foregroundColor: NSColor.secondaryLabelColor]
+		))
+		let centred = NSMutableParagraphStyle(); centred.alignment = .center
+		credits.addAttribute(.paragraphStyle, value: centred, range: NSRange(location: 0, length: credits.length))
+		NSApp.activate(ignoringOtherApps: true)
+		NSApp.orderFrontStandardAboutPanel(options: [
+			.applicationName: "TouchPlay",
+			.applicationVersion: version,
+			.version: "",
+			.credits: credits,
+			NSApplication.AboutPanelOptionKey(rawValue: "Copyright"): "© 2026 Shaheer Muzaffar"
+		])
 	}
 	
 	// MARK: Open preferences

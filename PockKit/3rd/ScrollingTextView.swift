@@ -158,6 +158,10 @@ extension ScrollingTextView {
             point.x += stringSize.width + spacing
         }
         
+        // Keep the looping copy inside this view; on the Touch Bar it otherwise spills over the widgets to the left.
+        NSBezierPath(rect: bounds).addClip()
+        if wantsLayer == false { wantsLayer = true }
+        layer?.masksToBounds = true
         textFontAttributes[NSAttributedString.Key.foregroundColor] = textColor
         text?.draw(at: point, withAttributes: textFontAttributes)
         

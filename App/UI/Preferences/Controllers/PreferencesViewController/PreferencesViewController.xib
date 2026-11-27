@@ -58,7 +58,7 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="18" id="aqi-fM-FZ3"/>
                                     </constraints>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Pock" id="1aB-Ls-NfT">
+                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="TouchPlay" id="1aB-Ls-NfT">
                                         <font key="font" usesAppearanceFont="YES"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -80,7 +80,7 @@
                                     <constraints>
                                         <constraint firstAttribute="width" constant="140" id="Nyb-Re-1Cn"/>
                                     </constraints>
-                                    <textFieldCell key="cell" selectable="YES" alignment="center" title="pock.app" id="cuv-gB-iKR">
+                                    <textFieldCell key="cell" selectable="YES" alignment="center" title="by Shaheer Muzaffar" id="cuv-gB-iKR">
                                         <font key="font" metaFont="miniSystem"/>
                                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -347,7 +347,7 @@
                                         </textField>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="mw3-L0-eHQ">
                                             <rect key="frame" x="-2" y="0.0" width="378" height="13"/>
-                                            <textFieldCell key="cell" selectable="YES" title="Double press `⌃ Control` key to toggle between Pock and System Touch Bar." id="FeU-cD-3A4">
+                                            <textFieldCell key="cell" selectable="YES" title="Double press `⌃ Control` key to toggle between TouchPlay and System Touch Bar." id="FeU-cD-3A4">
                                                 <font key="font" textStyle="footnote" name=".SFNS-Regular"/>
                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

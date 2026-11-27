@@ -66,8 +66,9 @@ public final class LyricsStore {
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
 			guard let self, self.trackKey == key else { return }
 			let current = NowPlayingCenter.shared.state
-			// No artist means a web page or clip, not a song: don't search.
-			guard !current.artist.trimmingCharacters(in: .whitespaces).isEmpty else {
+			// Videos (YouTube in a browser, VLC, IINA…) often have no artist, or a channel name instead: the title is
+			// searched on its own. Only long things (films, podcasts, streams over 15 minutes) are skipped.
+			guard current.duration <= 0 || current.duration < 15 * 60 else {
 				self.status = .notASong
 				self.notify()
 				return
@@ -77,7 +78,8 @@ public final class LyricsStore {
 	}
 
 	private func search(_ song: NowPlaying, key: String, attempt: Int) {
-		LyricsSource.fetch(title: NowPlayingCenter.cleanTitle(song.title), artist: song.artist, duration: song.duration) { [weak self] result in
+		LyricsSource.fetch(title: NowPlayingCenter.cleanTitle(song.title), artist: song.artist, duration: song.duration,
+						   rawTitle: song.title + " " + song.album) { [weak self] result in
 			guard let self else { return }
 			// Only real results are cached: a failed lookup (network blip, a request cut short by
 			// switching albums) must not hide this song's lyrics for the rest of the session.

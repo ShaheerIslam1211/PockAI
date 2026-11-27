@@ -23,7 +23,7 @@
 	<key>NSPrincipalClass</key>
 	<string>Weather.WeatherWidget</string>
 	<key>PKWidgetAuthor</key>
-	<string>Pierluigi Galdi</string>
+	<string>Shaheer Muzaffar</string>
 	<key>PKWidgetPreferenceClass</key>
 	<string>Weather.WeatherPreferencePane</string>
 </dict>

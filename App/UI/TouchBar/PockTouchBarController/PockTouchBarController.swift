@@ -71,6 +71,16 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 	override func didLoad() {
 		super.didLoad()
 		NotificationCenter.default.addObserver(self, selector: #selector(widgetSizeDidChange(_:)), name: NSNotification.Name("pockai.widget.sizeDidChange"), object: nil)
+		// Debug: log the strip's layout (`local.pockai.layout`).
+		DistributedNotificationCenter.default().addObserver(forName: .init("local.pockai.layout"), object: nil, queue: .main) { [weak self] _ in
+			guard let self else { return }
+			let np = NowPlayingCenter.shared.state
+			NSLog("[TouchPlay layout] ax=\(AXIsProcessTrusted()) lyrics status=\(LyricsStore.shared.status) title=\(np.title) artist=\(np.artist) album=\(np.album) dur=\(np.duration) app=\(np.app ?? "-") playing=\(np.playing)")
+			for v in self.scrollStack.arrangedSubviews {
+				let kids = v.subviews.map { "\(type(of: $0))@\(Int($0.frame.minX))w\(Int($0.frame.width))" }.joined(separator: ", ")
+				NSLog("[TouchPlay layout] \(type(of: v)) x=\(Int(v.frame.minX)) w=\(Int(v.frame.width)) fit=\(Int(v.fittingSize.width)) kids=[\(kids)]")
+			}
+		}
 		Roger.debug("[PockTouchBarController] Loaded.")
 	}
 	
@@ -191,6 +201,7 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 		return stack
 	}()
 	private var scrollWidthConstraint: NSLayoutConstraint?
+	private var suggestionsWidthConstraint: NSLayoutConstraint?
 	private var scrollWidgetItems: [PKWidgetTouchBarItem] = []
 
 	/// Width the strip may take on screen.
@@ -214,6 +225,10 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 
 	/// Rebuild the strip from your current layout.
 	private func buildScrollContent() {
+		TPSafely("build scroll strip") { buildScrollContentUnsafe() }
+	}
+
+	private func buildScrollContentUnsafe() {
 		for view in scrollStack.arrangedSubviews {
 			scrollStack.removeArrangedSubview(view)
 			view.removeFromSuperview()
@@ -251,8 +266,20 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 			guard !scrubbers.isEmpty else { continue }
 			var width: CGFloat = 0
 			for s in scrubbers where !s.isHidden {
-				let content = s.scrubberLayout.scrubberContentSize.width
-				let explicit = s.constraints.first { $0.firstAttribute == .width && $0.relation == .equal }?.constant
+				// Measure from the item count: NSScrubber only reports the items it has laid out so far, so
+				// sizing from that made the Dock creep wider every couple of seconds (the bar "moving by itself").
+				let content: CGFloat
+				if let flow = s.scrubberLayout as? NSScrubberFlowLayout, flow.itemSize.width > 0 {
+					let n = CGFloat(s.numberOfItems)
+					content = n * flow.itemSize.width + max(0, n - 1) * flow.itemSpacing
+				} else {
+					content = s.scrubberLayout.scrubberContentSize.width
+				}
+				// Only a width the widget set on purpose (e.g. the Dock's pinned items). Constraints AppKit makes from
+				// the current frame must be ignored, or every pass adds the spacing again and the Dock creeps wider.
+				let explicit = s.constraints.first {
+					$0.firstAttribute == .width && $0.relation == .equal && ($0.identifier?.hasSuffix(".width") ?? false)
+				}?.constant
 				width += explicit ?? content
 			}
 			width += CGFloat(max(0, view.subviews.count - 1)) * 8 + 4
@@ -289,6 +316,10 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 
 	/// Size the strip: at least the viewport (so flexible spaces spread out), wider when content needs it.
 	func layoutScrollContent() {
+		TPSafely("scroll layout") { layoutScrollContentUnsafe() }
+	}
+
+	private func layoutScrollContentUnsafe() {
 		let viewport = scrollViewportWidth
 		sizeScrubberWidgets(viewport: viewport)
 		scrollStack.layoutSubtreeIfNeeded()
@@ -297,6 +328,7 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 		scrollStack.frame = NSRect(x: 0, y: 0, width: width, height: 30)
 		if scrollView.documentView !== scrollStack { scrollView.documentView = scrollStack }
 		scrollWidthConstraint?.constant = viewport
+		suggestionsWidthConstraint?.constant = viewport
 	}
 
 	private func notifyScrollWidgets(appeared: Bool) {
@@ -315,6 +347,8 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 	private func introduceNewWidgets() {
 		let defaults = UserDefaults.standard
 		let knownKey = "pockai.introducedWidgets"
+		// Quick Actions moved into Control Center: take it off the bar once (its buttons are switched on there).
+		ControlCenterButtons.absorbQuickActions(layoutKey: "NSTouchBarConfig: \(NSTouchBar.CustomizationIdentifier.pockTouchBarController)")
 		// Widgets that existed before (you've already decided where they go).
 		let baseline: Set<String> = ["com.pigigaldi.pock.Esc", "com.pigigaldi.pock.Dock", "com.pigigaldi.pock.Status",
 									 "com.pigigaldi.pock.ControlCenter", "com.pigigaldi.pock.NowPlaying", "com.pigigaldi.pock.Weather",
@@ -376,11 +410,21 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 				scrollContainer.addArrangedSubview(AppTouchBarSwitcher.shared.appButton)
 			}
 			scrollContainer.addArrangedSubview(scrollView)
+			scrollContainer.addArrangedSubview(TypingSuggestions.shared.view)
 			item.view = scrollContainer
 			if scrollWidthConstraint == nil {
 				scrollWidthConstraint = scrollView.widthAnchor.constraint(equalToConstant: scrollViewportWidth)
 				scrollWidthConstraint?.isActive = true
 				scrollView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+				suggestionsWidthConstraint = TypingSuggestions.shared.view.widthAnchor.constraint(equalToConstant: scrollViewportWidth)
+				suggestionsWidthConstraint?.isActive = true
+			}
+			// While you type, suggestions take the widgets' place (same width, so nothing else moves).
+			scrollView.isHidden = TypingSuggestions.shared.isShowing
+			TypingSuggestions.shared.onShowingChange = { [weak self] showing in
+				guard let self else { return }
+				self.suggestionsWidthConstraint?.constant = self.scrollViewportWidth
+				self.scrollView.isHidden = showing
 			}
 			buildScrollContent()
 			return item
@@ -396,9 +440,9 @@ internal class PockTouchBarController: PKTouchBarMouseController {
 		Roger.info("[\(identifier.rawValue)][item] - initializes")
 		let item = PKWidgetTouchBarItem(widget: widget)
 		if item == nil {
-			NSLog("[PockAI] Widget `\(identifier.rawValue)` could not be created (principal class: \(String(describing: widget.principalClass)))")
+			NSLog("[TouchPlay] Widget `\(identifier.rawValue)` could not be created (principal class: \(String(describing: widget.principalClass)))")
 		} else if let view = item?.view {
-			NSLog("[PockAI] Widget `\(identifier.rawValue)` ready, width \(view.fittingSize.width)")
+			NSLog("[TouchPlay] Widget `\(identifier.rawValue)` ready, width \(view.fittingSize.width)")
 		}
 		// Widgets that grow and shrink with content give way first when the bar is full.
 		if ["com.pockai.widget.Subtitles", "com.pockai.widget.Lyrics", "com.pockai.widget.SystemMonitor"].contains(identifier.rawValue) {

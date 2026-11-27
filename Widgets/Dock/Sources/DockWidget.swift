@@ -303,11 +303,29 @@ extension DockWidget: DockDelegate {
 				let safeIndex = min(max(0, index), self.dockItems.count)
 				self.dockItems.insert(item, at: safeIndex)
 			}
+			// Keep the Dock where you left it: no jumping to the active app when apps open, close or switch.
+			let offset = self.dockScrubberScrollOffset
 			self.dockScrubber.reloadData()
-			if item.isFrontmost, let i = self.dockItems.firstIndex(where: { $0.diffId == item.diffId }), i < self.dockScrubber.numberOfItems {
-				self.dockScrubber.scrollItem(at: i, to: .center)
-			}
+			self.restoreDockScrubberScrollOffset(offset)
 		}
+	}
+
+	/// NSScrubber keeps its items in an internal scroll view.
+	private var dockScrubberScrollView: NSScrollView? {
+		func find(_ v: NSView) -> NSScrollView? {
+			if let s = v as? NSScrollView { return s }
+			for sub in v.subviews { if let s = find(sub) { return s } }
+			return nil
+		}
+		return find(dockScrubber)
+	}
+	private var dockScrubberScrollOffset: CGFloat { dockScrubberScrollView?.contentView.bounds.origin.x ?? 0 }
+	private func restoreDockScrubberScrollOffset(_ x: CGFloat) {
+		guard let scroll = dockScrubberScrollView else { return }
+		scroll.layoutSubtreeIfNeeded()
+		let maxX = max(0, (scroll.documentView?.frame.width ?? 0) - scroll.contentView.bounds.width)
+		scroll.contentView.setBoundsOrigin(NSPoint(x: min(max(0, x), maxX), y: 0))
+		scroll.reflectScrolledClipView(scroll.contentView)
 	}
 
 	func didUpdateActiveItem(_ item: DockItem, at index: Int, activated: Bool) {
@@ -317,10 +335,8 @@ extension DockWidget: DockDelegate {
 				  let view = self.cachedDockItemViews.first(where: { $0.diffId == item.diffId }) else {
 				return
 			}
+			_ = i
 			view.set(isFrontmost: activated)
-			if activated, i < self.dockScrubber.numberOfItems {
-				self.dockScrubber.scrollItem(at: i, to: .center)
-			}
 		}
 	}
 

@@ -80,17 +80,19 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
-	<string>PockAI uses this to control media players and read the current video position for subtitles.</string>
+	<string>TouchPlay uses this to control media players and read the current video position for subtitles.</string>
 	<key>NSAudioCaptureUsageDescription</key>
-	<string>PockAI listens to what is playing to animate the lyrics equaliser during music breaks. Nothing is recorded or saved.</string>
+	<string>TouchPlay listens to what is playing to animate the lyrics equaliser during music breaks. Nothing is recorded or saved.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>TouchPlay's Control Center shows whether Bluetooth is on and lets you switch it from the Touch Bar.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>PockAI shows your next calendar event on the Touch Bar.</string>
+	<string>TouchPlay shows your next calendar event on the Touch Bar.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>PockAI shows your next calendar event on the Touch Bar.</string>
+	<string>TouchPlay shows your next calendar event on the Touch Bar.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>PockAI — built on Pock (© Pierluigi Galdi, MIT), Purrbar and PocketAI.</string>
+	<string>TouchPlay 2.0.0 — made by Shaheer Muzaffar. Includes open-source code from Pock (MIT).</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>PockAI runs a tiny server on this Mac (127.0.0.1) so the PockAI browser extension can send subtitles to the Touch Bar.</string>
+	<string>TouchPlay runs a tiny server on this Mac (127.0.0.1) so the TouchPlay browser extension can send subtitles to the Touch Bar.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

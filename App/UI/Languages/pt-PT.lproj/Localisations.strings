@@ -8,17 +8,17 @@
 */
 
 // MARK: Base
-"base.website_url" = "https://pock.app";
+"base.website_url" = "";
 "base.widget" = "widget";
 
 // MARK: General
-"general.welcome-to-pock" = "Bem-vindo à Pock";
+"general.welcome-to-pock" = "Bem-vindo à TouchPlay";
 "general.pock-widgets-manager" = "Gestor de Widgets para a Touch Bar do Macbook";
 
 // MARK: MainBarMenu
 // General
 "menu.general" = "Geral";
-"menu.about" = "Sobre Pock";
+"menu.about" = "Sobre TouchPlay";
 "menu.preferences" = "Preferências…";
 // Widgets
 "menu.widgets" = "Widgets";
@@ -26,25 +26,25 @@
 "menu.widgets.install-widget" = "Instalar widget…";
 // Customisation
 "menu.customization" = "Personalização";
-"menu.customization.pock" = "Personalizar Pock…";
+"menu.customization.pock" = "Personalizar TouchPlay…";
 "menu.customization.control-strip" = "Personalizar Control Strip…";
 // Advanced
 "menu.advanced" = "Avançadas";
 "menu.advanced.re-install-default-widgets" = "Reinstalar widgets predefinidos…";
 "menu.advanced.open-widgets-folder" = "Abrir a pasta widgets…";
-"menu.advanced.reload_pock" = "Recarregar Pock…";
-"menu.advanced.relaunch_pock" = "Relançar Pock…";
+"menu.advanced.reload_pock" = "Recarregar TouchPlay…";
+"menu.advanced.relaunch_pock" = "Relançar TouchPlay…";
 "menu.advanced.reload_touchbar" = "Recarregar Control Strip…";
 "menu.advanced.relaunch_touchbar" = "Relançar Touch Bar…";
 "menu.developers" = "Programadores";
 "menu.advanced.show_debug_console" = "Mostrar a consola de debug…";
 // Quit
 "menu.goodbye" = "Adeus";
-"menu.quit" = "Fechar Pock";
+"menu.quit" = "Fechar TouchPlay";
 
 // MARK: Onboard Screen
 "onboard.title" = "Tire o máximo rendimento da Touch Bar do seu MacBook Pro";
-"onboard.body" = "Pock vem com widgets predefinidos que lhe permitem aceder a informações essenciais, comandos e características dos seus serviços mais utilizados.";
+"onboard.body" = "TouchPlay vem com widgets predefinidos que lhe permitem aceder a informações essenciais, comandos e características dos seus serviços mais utilizados.";
 "onboard.footer" = "Siga as instruções na Touch Bar para instalar os widgets predefinidos";
 "onboard.open-preferences" = "Abrir Preferências…";
 "onboard.continue-with-default-settings" = "Continuar com as configurações predefinidas";
@@ -60,9 +60,9 @@
 "preferences.layout.title" = "Layout";
 
 "preferences.double-control.title" = "Mudar para a Touch Bar predefinida";
-"preferences.double-control.desc" = "Pressione duas vezes `^Control` para alternar entre o Pock e a Touch Bar de sistema.";
+"preferences.double-control.desc" = "Pressione duas vezes `^Control` para alternar entre o TouchPlay e a Touch Bar de sistema.";
 "preferences.default-touchbar.shows" = "A Touch Bar predefinida mostra:";
-"preferences.default-touchbar.desc" = "Para funcionar corretamente, Pock pode sobrescrever as configurações predefinidas da Touch Bar. Pode sempre alterar as configurações predefinidas a partir de \"Preferências de Sistema > Teclado\" para adaptar a Touch Bar às suas necessidades.";
+"preferences.default-touchbar.desc" = "Para funcionar corretamente, TouchPlay pode sobrescrever as configurações predefinidas da Touch Bar. Pode sempre alterar as configurações predefinidas a partir de \"Preferências de Sistema > Teclado\" para adaptar a Touch Bar às suas necessidades.";
 
 "preferences.cursor-options.title" = "Opções do cursor";
 "preferences.cursor-options.enable-mouse-support" = "Ativar suporte do cursor";
@@ -71,9 +71,9 @@
 "preferences.updates.check-for-updates-once-a-day" = "Verificar atualizações uma vez por dia.";
 
 "preferences.updates.already-on-latest-version.title" = "Versão instalada: %@";
-"preferences.updates.already-on-latest-version.message" = "O Pock já está a funcionar na versão mais recente.";
+"preferences.updates.already-on-latest-version.message" = "O TouchPlay já está a funcionar na versão mais recente.";
 "preferences.updates.new-version-available.title" = "Está disponível uma nova versão.";
-"preferences.updates.new-version-available.message" = "Quer atualizar o Pock da versão %@ para a versão %@?";
+"preferences.updates.new-version-available.message" = "Quer atualizar o TouchPlay da versão %@ para a versão %@?";
 
 // MARK: Layout Style
 "layout-style.show-control-strip" = "Mostrar Control Strip";
@@ -93,14 +93,14 @@
 "widgets-manager.list.title" = "Gestor de Widgets";
 "widgets-manager.list.select-widget" = "Selecionar um widget da lista";
 "widgets-manager.list.will-be-updated" = "\"%@\" será atualizado";
-"widgets-manager.list.did-update" = "\"%@\" widget atualizado.\nRecarregar Pock para atualizar.";
+"widgets-manager.list.did-update" = "\"%@\" widget atualizado.\nRecarregar TouchPlay para atualizar.";
 "widgets-manager.loading-preferences" = "A carregar as preferências…";
 "widgets-manager.list.no-preferences" = "Este widget não tem preferências";
 "widgets-manager.list.reset-preferences" = "Repor as definições para os valores por defeito";
 
 // MARK: Empty Touch Bar
 "widgets.defaults.tap-to-install" = "Tocar para instalar os widgets predefinidos…";
-"widgets.empty.add-widgets-to-pock" = "Tocar para adicionar o widget ao Pock…";
+"widgets.empty.add-widgets-to-pock" = "Tocar para adicionar o widget ao TouchPlay…";
 
 // MARK: Widget Install/Update
 
@@ -108,7 +108,7 @@
 "widget.install.default.body" = "Quer instalar os widgets predefinidos?";
 
 "widget.installing.default.body" = "Processado: %d/%d";
-"widget.installed.default.success.body" = "Os widgets predefinidos foram instalados corretamente!\nClicar em \“Relançar\” para relançar o Pock e desfrutar da sua nova Touch Bar!";
+"widget.installed.default.success.body" = "Os widgets predefinidos foram instalados corretamente!\nClicar em \“Relançar\” para relançar o TouchPlay e desfrutar da sua nova Touch Bar!";
 
 "widget.install.drag-here.title" = "Instalar novo widget";
 "widget.install.drag-here.body" = "Arraste e coloque o ficheiro do widget dentro deste diálogo, ou clique no botão \"Escolher...\" para apanhar o ficheiro.";
@@ -142,13 +142,13 @@
 "widget.error.body" = "Ocorreu um erro durante o processo.\n\n%@";
 
 "widget.remove.success.title" = "Widget removido corretamente!";
-"widget.remove.success.body" = "Ótimo, %@ widget foi completamente removido.\nClicar em \"Relançar\" para relançar Pock.";
+"widget.remove.success.body" = "Ótimo, %@ widget foi completamente removido.\nClicar em \"Relançar\" para relançar TouchPlay.";
 
 "widget.install.success.title" = "Que sucesso!";
-"widget.install.success.body" = "Parabéns, %@ widget está agora pronto para ser adicionado à TouchBar.\nRecarregar Pock e depois clicar na opção \"Personalizar Pock…\" para personalizar a sua experiência com os widget.";
+"widget.install.success.body" = "Parabéns, %@ widget está agora pronto para ser adicionado à TouchBar.\nRecarregar TouchPlay e depois clicar na opção \"Personalizar TouchPlay…\" para personalizar a sua experiência com os widget.";
 
 "widget.update.success.title" = "Feito!";
-"widget.update.success.body" = "Parabéns, %@ widget está agora atualizado à última versão.\nClicar em \"Relançar\" para relançar Pock.";
+"widget.update.success.body" = "Parabéns, %@ widget está agora atualizado à última versão.\nClicar em \"Relançar\" para relançar TouchPlay.";
 
 // MARK: Actions
 "general.action.cancel" = "Cancelar";
@@ -177,7 +177,7 @@
 "error.updater.invalid-endpoint-url" = "URL inválido.";
 "error.updater.response-error" = "Resposta do server não válida: %@";
 "error.updater.parsing-error" = "Dados de resposta não válidos.";
-"error.updater.invalid-core-version" = "Uma nova versão para este widget está disponível, mas a sua versão de Pock não é suportada. Por favor, atualize para a versão mínima suportada (%@) para instalar a versão deste widget.";
+"error.updater.invalid-core-version" = "Uma nova versão para este widget está disponível, mas a sua versão de TouchPlay não é suportada. Por favor, atualize para a versão mínima suportada (%@) para instalar a versão deste widget.";
 
 "error.downloader.invalid-file-url" = "Não é possível encontrar o ficheiro solicitado no server remoto.";
 "error.downloader.response-error" = "Não é possível solicitar o ficheiro. Resposta do server: %@";

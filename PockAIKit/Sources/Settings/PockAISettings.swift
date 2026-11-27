@@ -15,7 +15,7 @@ public enum PockAISettings {
 		model.refresh()
 		if window == nil {
 			let w = NSWindow(contentViewController: NSHostingController(rootView: SettingsView(model: model)))
-			w.title = "PockAI Settings"
+			w.title = "TouchPlay Settings"
 			w.styleMask = [.titled, .closable, .miniaturizable]
 			w.isReleasedWhenClosed = false
 			w.center()
@@ -39,7 +39,7 @@ public enum PockAISettings {
 		try? fm.copyItem(at: source, to: dest)
 		NSWorkspace.shared.activateFileViewerSelecting([dest])
 		let alert = NSAlert()
-		alert.messageText = "Install the PockAI Subtitles extension"
+		alert.messageText = "Install the TouchPlay Subtitles extension"
 		alert.informativeText = """
 		1. In Chrome / Edge / Brave / Arc open chrome://extensions
 		2. Turn on “Developer mode” (top right)
@@ -175,7 +175,7 @@ private struct LyricsTab: View {
 			Section("Full player (Purr)") {
 				Toggle("Open the full-bar player automatically when music starts", isOn: $autoOpen)
 				Toggle("If the bar is full, open the full player for lyrics", isOn: $fullWhenNoRoom)
-				Text("Tap the Lyrics widget to open the full player with lyrics, equaliser and controls. Long-press to hide / show lyrics. Swipe for next / previous song. Themes, translation and script are in the PockAI menu → Lyrics & Player.")
+				Text("Tap the Lyrics widget to open the full player with lyrics, equaliser and controls. Long-press to hide / show lyrics. Swipe for next / previous song. Themes, translation and script are in the TouchPlay menu → Lyrics & Player.")
 					.font(.caption).foregroundStyle(.secondary)
 			}
 		}
@@ -251,6 +251,12 @@ private struct TouchBarTab: View {
 				}
 				.onChange(of: size) { v in TouchBarMetrics.preferredSize = v }
 				Text("Detected: \(TouchBarMetrics.modelIdentifier) → \(TouchBarMetrics.isSixteenInch ? "16-inch" : "13/15-inch") Touch Bar, \(Int(TouchBarMetrics.fullBarContentWidth())) pt usable. Full-bar screens (player, Writing Tools, subtitles) fill it exactly.")
+					.font(.caption).foregroundStyle(.secondary)
+			}
+			Section("Typing suggestions") {
+				Toggle("Show typing suggestions on TouchPlay's bar in every app (Notes, Claude, Word, Chrome…)",
+					   isOn: setting("pockai.typing", true))
+				Text("Words to finish, fix or come next appear over the widgets while you type; tap one to type it. Widgets come back when you stop typing, click, or press Esc or Return. Never shown in password fields.")
 					.font(.caption).foregroundStyle(.secondary)
 			}
 			AppControlsSection()

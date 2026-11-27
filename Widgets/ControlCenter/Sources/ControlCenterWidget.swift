@@ -9,6 +9,7 @@
 import Foundation
 import AppKit
 import PockKit
+import PockAIKit
 
 class ControlCenterWidget: PKWidget {
     
@@ -31,6 +32,8 @@ class ControlCenterWidget: PKWidget {
             CCVolumeUpItem(parentWidget: self),
             CCVolumeToggleItem(parentWidget: self),
             CCVolumeMuteItem(parentWidget: self)
+        ] + ControlCenterButtons.all.map { CCQuickItem(parentWidget: self, button: $0) } + [
+            CCMoreItem(parentWidget: self)
         ]
     }()
     

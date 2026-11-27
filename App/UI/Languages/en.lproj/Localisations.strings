@@ -8,17 +8,17 @@
 */
 
 // MARK: Base
-"base.website_url" = "https://pock.app";
+"base.website_url" = "";
 "base.widget" = "widget";
 
 // MARK: General
-"general.welcome-to-pock" = "Welcome to PockAI";
-"general.pock-widgets-manager" = "Pock widgets + AI, lyrics & subtitles for your Touch Bar";
+"general.welcome-to-pock" = "Welcome to TouchPlay";
+"general.pock-widgets-manager" = "TouchPlay widgets + AI, lyrics & subtitles for your Touch Bar";
 
 // MARK: MainBarMenu
 // General
 "menu.general" = "General";
-"menu.about" = "About PockAI";
+"menu.about" = "About TouchPlay";
 "menu.preferences" = "Preferences…";
 // Widgets
 "menu.widgets" = "Widgets";
@@ -26,25 +26,25 @@
 "menu.widgets.install-widget" = "Install widget…";
 // Customisation
 "menu.customization" = "Customisation";
-"menu.customization.pock" = "Customize PockAI…";
+"menu.customization.pock" = "Customize TouchPlay…";
 "menu.customization.control-strip" = "Customize Control Strip…";
 // Advanced
 "menu.advanced" = "Advanced";
 "menu.advanced.re-install-default-widgets" = "Re-install default widgets…";
 "menu.advanced.open-widgets-folder" = "Open widgets folder…";
-"menu.advanced.reload_pock" = "Reload PockAI…";
-"menu.advanced.relaunch_pock" = "Relaunch PockAI…";
+"menu.advanced.reload_pock" = "Reload TouchPlay…";
+"menu.advanced.relaunch_pock" = "Relaunch TouchPlay…";
 "menu.advanced.reload_touchbar" = "Reload Control Strip…";
 "menu.advanced.relaunch_touchbar" = "Relaunch Touch Bar…";
 "menu.developers" = "Developers";
 "menu.advanced.show_debug_console" = "Show debug console…";
 // Quit
 "menu.goodbye" = "Goodbye";
-"menu.quit" = "Quit PockAI";
+"menu.quit" = "Quit TouchPlay";
 
 // MARK: Onboard Screen
 "onboard.title" = "Get the Most Out of Your MacBook Pro Touch Bar";
-"onboard.body" = "PockAI comes with default widgets that let you access the most essential information and functionality of your frequently used controls and services.";
+"onboard.body" = "TouchPlay comes with default widgets that let you access the most essential information and functionality of your frequently used controls and services.";
 "onboard.footer" = "Follow the instructions in the Touch Bar to install default widgets";
 "onboard.open-preferences" = "Open Preferences…";
 "onboard.continue-with-default-settings" = "Continue with default settings";
@@ -60,9 +60,9 @@
 "preferences.layout.title" = "Layout";
 
 "preferences.double-control.title" = "Switch to default Touch Bar";
-"preferences.double-control.desc" = "Double press `^Control` key to toggle between PockAI and System Touch Bar.";
+"preferences.double-control.desc" = "Double press `^Control` key to toggle between TouchPlay and System Touch Bar.";
 "preferences.default-touchbar.shows" = "Default Touch Bar shows:";
-"preferences.default-touchbar.desc" = "To work properly, Pock may override the default Touch Bar preferences.
+"preferences.default-touchbar.desc" = "To work properly, TouchPlay may override the default Touch Bar preferences.
 You can always configure default settings from `System Preferences > Keyboard` to adapt the Touch Bar to your needs.";
 
 "preferences.cursor-options.title" = "Cursor options";
@@ -72,9 +72,9 @@ You can always configure default settings from `System Preferences > Keyboard` t
 "preferences.updates.check-for-updates-once-a-day" = "Check for updates once a day";
 
 "preferences.updates.already-on-latest-version.title" = "Installed version: %@";
-"preferences.updates.already-on-latest-version.message" = "PockAI is already running on latest version.";
+"preferences.updates.already-on-latest-version.message" = "TouchPlay is already running on latest version.";
 "preferences.updates.new-version-available.title" = "A new version is available";
-"preferences.updates.new-version-available.message" = "Would you like to update PockAI from version %@ to version %@?";
+"preferences.updates.new-version-available.message" = "Would you like to update TouchPlay from version %@ to version %@?";
 
 // MARK: Layout Style
 "layout-style.show-control-strip" = "Show Control Strip";
@@ -94,14 +94,14 @@ You can always configure default settings from `System Preferences > Keyboard` t
 "widgets-manager.list.title" = "Widgets Manager";
 "widgets-manager.list.select-widget" = "Select a widget from the list";
 "widgets-manager.list.will-be-updated" = "\"%@\" widget will be updated";
-"widgets-manager.list.did-update" = "\"%@\" widget updated.\nReload PockAI to refresh.";
+"widgets-manager.list.did-update" = "\"%@\" widget updated.\nReload TouchPlay to refresh.";
 "widgets-manager.loading-preferences" = "Loading Preferences…";
 "widgets-manager.list.no-preferences" = "This widget has no preferences";
 "widgets-manager.list.reset-preferences" = "Reset preferences to default values";
 
 // MARK: Empty Touch Bar
 "widgets.defaults.tap-to-install" = "Tap to install default widgets…";
-"widgets.empty.add-widgets-to-pock" = "Tap to add widgets to PockAI…";
+"widgets.empty.add-widgets-to-pock" = "Tap to add widgets to TouchPlay…";
 
 // MARK: Widget Install/Update
 
@@ -109,7 +109,7 @@ You can always configure default settings from `System Preferences > Keyboard` t
 "widget.install.default.body" = "Would you like to install default widgets?";
 
 "widget.installing.default.body" = "Processed: %d/%d";
-"widget.installed.default.success.body" = "Default widgets was installed successfully!\nClick on `Relaunch` to relaunch PockAI and enjoy your shiny-new Touch Bar!";
+"widget.installed.default.success.body" = "Default widgets was installed successfully!\nClick on `Relaunch` to relaunch TouchPlay and enjoy your shiny-new Touch Bar!";
 
 "widget.install.drag-here.title" = "Install new widget";
 "widget.install.drag-here.body" = "Drag & Drop widget file inside this dialog, or click the `Choose…` button to pick up the file.";
@@ -143,13 +143,13 @@ You can always configure default settings from `System Preferences > Keyboard` t
 "widget.error.body" = "An error occured during the process.\n\n%@";
 
 "widget.remove.success.title" = "Widget successfully removed!";
-"widget.remove.success.body" = "Great, %@ widget was completely removed.\nClick on `Relaunch` to relaunch PockAI.";
+"widget.remove.success.body" = "Great, %@ widget was completely removed.\nClick on `Relaunch` to relaunch TouchPlay.";
 
 "widget.install.success.title" = "What a success!";
-"widget.install.success.body" = "Congratulations, %@ widget is now ready to be added to the Touch Bar.\nReload PockAI and then click on `Customize PockAI…` option to personalize your widgets experience.";
+"widget.install.success.body" = "Congratulations, %@ widget is now ready to be added to the Touch Bar.\nReload TouchPlay and then click on `Customize TouchPlay…` option to personalize your widgets experience.";
 
 "widget.update.success.title" = "Done!";
-"widget.update.success.body" = "Congratulations, %@ widget is now updated to the latest version.\nClick on `Relaunch` to relaunch PockAI.";
+"widget.update.success.body" = "Congratulations, %@ widget is now updated to the latest version.\nClick on `Relaunch` to relaunch TouchPlay.";
 
 // MARK: Actions
 "general.action.cancel" = "Cancel";
@@ -178,7 +178,7 @@ You can always configure default settings from `System Preferences > Keyboard` t
 "error.updater.invalid-endpoint-url" = "Invalid URL.";
 "error.updater.response-error" = "Invalid response from the server: %@";
 "error.updater.parsing-error" = "Invalid response data.";
-"error.updater.invalid-core-version" = "A new version for this widget is available, but your version of PockAI is not supported. Please, update to the minimum supported version (%@) to install this widget's version.";
+"error.updater.invalid-core-version" = "A new version for this widget is available, but your version of TouchPlay is not supported. Please, update to the minimum supported version (%@) to install this widget's version.";
 
 "error.downloader.invalid-file-url" = "Can't find requested file on remote server.";
 "error.downloader.response-error" = "Can't request file. Server response: %@";

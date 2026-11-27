@@ -162,25 +162,21 @@ enum LyricsScript: String, CaseIterable {
     }
 }
 
+extension LyricsScript {
+    /// Settings → Lyrics: show Hindi-script (Devanagari) lyrics in Roman Urdu letters. On by default.
+    static var romaniseHindi: Bool {
+        get { UserDefaults.standard.object(forKey: "pockai.lyrics.romanHindi") as? Bool ?? true }
+        set { UserDefaults.standard.set(newValue, forKey: "pockai.lyrics.romanHindi") }
+    }
+}
+
 extension Lyrics {
-    // Devanagari → Roman letters the way Hindi/Urdu is actually said ("kuch is tarah", not "kucha isa taraha");
-    // timing kept, word tags dropped.
+    /// Devanagari → Roman Urdu letters ("zindagi", "mohabbat", "main", "hai"); timing kept, word tags dropped.
     func romanised() -> Lyrics {
         Lyrics(lines: lines.map { LyricLine(t: $0.t, text: Self.romanise($0.text)) }, synced: synced)
     }
 
     static func romanise(_ text: String) -> String {
-        text.split(separator: " ", omittingEmptySubsequences: false).map { word -> String in
-            var latin = String(word).applyingTransform(.toLatin, reverse: false) ?? String(word)
-            // A word ending in a bare consonant is not followed by the inherent "a" in speech.
-            if let last = word.unicodeScalars.last?.value,
-               (0x0915...0x0939).contains(last) || (0x0958...0x095F).contains(last),
-               latin.hasSuffix("a") {
-                latin.removeLast()
-            }
-            // Nasal marks read as "n" (palakon), not "m".
-            latin = latin.replacingOccurrences(of: "ṁ", with: "n").replacingOccurrences(of: "m̐", with: "n")
-            return latin.applyingTransform(.stripDiacritics, reverse: false) ?? latin
-        }.joined(separator: " ")
+        RomanUrdu.transliterate(text)
     }
 }

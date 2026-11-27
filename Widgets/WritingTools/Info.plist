@@ -23,7 +23,7 @@
 	<key>NSPrincipalClass</key>
 	<string>WritingTools.WritingToolsWidget</string>
 	<key>PKWidgetAuthor</key>
-	<string>PockAI</string>
+	<string>Shaheer Muzaffar</string>
 	<key>PKWidgetPreferenceClass</key>
 	<string>PockAIKit.WritingToolsPreferencePane</string>
 </dict>
